@@ -3,7 +3,7 @@ Wrapper script for experimantal codes.
 
 ## 想定している使用方法
 gitlog.py，template.pyは  
-pythonのパスが通った場所に置く, もしくはシンボリックを張ると便利.  
+pythonのパスが通った場所に置く, もしくはシンボリックを張る.  
 例)/usr/local/lib/python2.7/dist-packagesにexp_wrapperというフォルダを作成  
 exp_wrapper以下のファイル構成  
 .  
