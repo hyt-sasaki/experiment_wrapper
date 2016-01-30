@@ -6,9 +6,11 @@ import git
 
 
 class gitlog(object):
-    def __init__(self, repo, branch='master'):
+    def __init__(self, repo, branch=None):
         self.repo = repo
         self.file = file
+        if branch is None:
+            branch = self.repo.active_branch.name
         try:
             self.latest_commit =\
                 repo.iter_commits(branch, max_count=100).next()
@@ -45,11 +47,11 @@ class gitlog(object):
             print '============'
 
 
-def make_repo(script_path):
+def make_repo(script_path, depth=5):
     dir = os.path.dirname(script_path)
     path = os.path.abspath(dir)
     repo_exist = False
-    for i in range(5):
+    for i in range(depth):
         try:
             repo = git.Repo(path)
             repo_exist = True
@@ -80,7 +82,7 @@ def make_repo(script_path):
 
 
 def write_commitlog(
-    script_path, filepath=None, branch='master', verbose=False
+    script_path, filepath=None, branch=None, verbose=False
 ):
     # リポジトリの取得
     repo = make_repo(script_path)
@@ -89,6 +91,9 @@ def write_commitlog(
         if verbose:
             print 'リポジトリが存在しません'
         return
+    # ブランチの設定
+    if branch is None:
+        branch = repo.active_branch.name
 
     # filepathがNoneもしくはディレクトリの場合には，自動的にファイル名を作成
     if filepath is None:
