@@ -10,8 +10,8 @@ import shutil
 import glob
 import re
 from logging import getLogger
-from logging import INFO
-from logging import StreamHandler
+from logging import INFO, DEBUG
+from logging import StreamHandler, FileHandler
 from logging import Formatter
 import errno
 
@@ -65,12 +65,19 @@ def make_parser():
         help=comment_help
     )
 
-    verbose_help = 'show logging info'
+    verbose_help = 'logging level'
     parser.add_argument(
         '+v', '++verbose',
-        action='store_true',
-        default=False,
+        type=int,
+        default=INFO,
         help=verbose_help
+    )
+    logfile_help = 'log file name'
+    parser.add_argument(
+        '+l', '++logfile',
+        type=str,
+        default=None,
+        help=logfile_help
     )
 
     return parser
@@ -192,6 +199,19 @@ def move_output(output_files, output_dir, logger=getLogger()):
                 logger.info('%s has been moved' % ofile)
 
 
+def move_logfile(logfile, output_dir):
+    if logfile is not None:
+        output_files_dir = os.path.join(output_dir, 'output_files')
+        try:
+            os.makedirs(output_files_dir)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+            pass
+        if os.path.exists(logfile):
+            shutil.move(logfile, output_files_dir)
+
+
 def main():
     # パーサーの生成
     parser = make_parser()
@@ -201,16 +221,23 @@ def main():
 
     # ログの出力レベルの設定
     logger = getLogger(__name__)
-    if args.verbose:
-        format = Formatter(
-            "\x1b[1;30m[%(asctime) -15s]\n%(filename)s,"
-            "L%(lineno)s:%(levelname)s\t%(message)s\x1b[39;49;0m"
-        )
+    format_str = \
+        "[%(asctime) -15s]\n%(filename)s," \
+        "L%(lineno)s:%(levelname)s\t%(message)s"
+    color_format_str = "\x1b[1;30m" + format_str + "\x1b[39;49;0m"
+    color_format = Formatter(color_format_str)
 
-        logger.setLevel(INFO)
-        sh = StreamHandler()
-        sh.setFormatter(format)
-        logger.addHandler(sh)
+    logger.setLevel(DEBUG)
+    sh = StreamHandler()
+    sh.setFormatter(color_format)
+    sh.setLevel(args.verbose)
+    logger.addHandler(sh)
+    if args.logfile is not None:
+        fh = FileHandler(args.logfile, 'w')
+        fh.setLevel(DEBUG)
+        format = Formatter(format_str)
+        fh.setFormatter(format)
+        logger.addHandler(fh)
 
     # 実行するpythonファイルの動的import
     module_name, module = dynamic_import(args.pyfile, logger)
@@ -264,6 +291,14 @@ def main():
     make_symboliclink(
         io_files_dict['output_symlinks'], output_dir, 'output_symlinks', logger
     )
+
+    # ファイルハンドラを閉じる
+    for handler in logger.handlers:
+        if type(handler) is FileHandler:
+            handler.close()
+
+    # ログファイルを出力用ディレクトリに移動
+    move_logfile(args.logfile, output_dir)
 
 
 if __name__ == '__main__':
