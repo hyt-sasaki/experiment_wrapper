@@ -1,15 +1,11 @@
 # -*- coding:utf-8 -*-
-import argparse
-from exp_wrapper.template import template    # パスが通った場所にtemplate.py等を配置しておく
+from exp_wrapper import template    # パスが通った場所にtemplate.py等を配置しておく
 
 
-class Example(template):        # templateを継承
+class Example(template.Main):        # templateを継承
     def __init__(self, argv):
-        # parserの取得
-        # make_parser()は使用方法に従って実装
-        parser = make_parser()
-        # 親クラスtemplateのコンストラクタを実行
-        super(Example, self).__init__(parser, argv)
+        # 親クラスtemplate.Mainのコンストラクタを実行
+        super(Example, self).__init__(argv)
 
     # 基本的な処理内容はexcute(self)に記述する
     def execute(self):
@@ -40,6 +36,38 @@ class Example(template):        # templateを継承
             # 作成されたディレクトリに移動される
             self.out_files['result'] = self.args.output
 
+    # 必要に応じて, コマンドライン引数を設定
+    def make_parser(self):
+        parser = super(Example, self).make_parser()
+        # parserの設定
+        parser_decsription = """
+        Example script for experiment.py
+        This script calculate sum of x and y.
+        """
+        parser.description = parser_decsription
+        parser.prog = 'example'
+        x_help = 'the first argument of add operation'
+        parser.add_argument(
+            '-x',
+            type=float,
+            help=x_help
+        )
+        y_help = 'the second argument of add operation'
+        parser.add_argument(
+            '-y',
+            type=float,
+            help=y_help
+        )
+        output_help = 'output filename'
+        parser.add_argument(
+            '-o', '--output',
+            type=str,
+            default=None,
+            help=output_help
+        )
+
+        return parser
+
 
 # main(argv)は, ほぼ手を加える必要はない
 def main(argv):
@@ -52,46 +80,6 @@ def main(argv):
         error = e.message.__str__()
     return obj.make_output_json(), error
 
-
-# 必要に応じて, コマンドライン引数を設定
-def make_parser():
-    # parserの設定
-    parser_decsription = """
-    Example script for experiment.py
-    This script calculate sum of x and y.
-    """
-    parser = argparse.ArgumentParser(
-        description=parser_decsription,
-        prog='example'
-    )
-    x_help = 'the first argument of add operation'
-    parser.add_argument(
-        '-x',
-        type=float,
-        help=x_help
-    )
-    y_help = 'the second argument of add operation'
-    parser.add_argument(
-        '-y',
-        type=float,
-        help=y_help
-    )
-    output_help = 'output filename'
-    parser.add_argument(
-        '-o', '--output',
-        type=str,
-        default=None,
-        help=output_help
-    )
-    verbose_help = 'show logging info'
-    parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        default=False,
-        help=verbose_help
-    )
-
-    return parser
 
 # experiment.pyを用いずに, 本スクリプトを直接実行する場合は
 # こちらが実行される

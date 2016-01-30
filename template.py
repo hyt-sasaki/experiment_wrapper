@@ -9,8 +9,9 @@ from inspect import currentframe
 from os.path import splitext, split
 
 
-class template(object):
-    def __init__(self, parser, argv):
+class Main(object):
+    def __init__(self, argv):
+        parser = self.make_parser()
         self.args = parser.parse_args(argv)
         self.in_params = vars(self.args)
         self.out_params = dict()
@@ -67,21 +68,41 @@ class template(object):
         """
         pass
 
+    def make_parser(self):
+        # parserの設定
+        parser_decsription = """
+        template
+        """
+        parser = argparse.ArgumentParser(
+            description=parser_decsription
+        )
+        verbose_help = 'logging level'
+        parser.add_argument(
+            '-v', '--verbose',
+            type=int,
+            default=INFO,
+            help=verbose_help
+        )
+        logfile_help = 'log file name'
+        parser.add_argument(
+            '-l', '--logfile',
+            type=str,
+            default=None,
+            help=logfile_help
+        )
+
+        return parser
+
 
 def main(argv):
-    parser = argparse.ArgumentParser(
-        description='template',
-        prog='template'
-    )
-
-    temp_obj = template(parser, argv)
+    obj = Main(argv)
 
     error = None
 
     try:
-        temp_obj.execute()
+        obj.execute()
     except Exception:
         error = 'unexpected_error'
     except KeyboardInterrupt:
         error = 'KeyboardInterrupted'
-    return temp_obj.make_output_json(), error
+    return obj.make_output_json(), error
