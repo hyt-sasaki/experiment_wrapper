@@ -9,7 +9,10 @@ import json
 import shutil
 import glob
 import re
-import logging
+from logging import getLogger
+from logging import INFO
+from logging import StreamHandler
+from logging import Formatter
 import errno
 
 
@@ -73,37 +76,37 @@ def make_parser():
     return parser
 
 
-def dynamic_import(pyfile_str):
+def dynamic_import(pyfile_str, logger=getLogger()):
     abspath = os.path.abspath(pyfile_str)
     abspath_without_ext = os.path.splitext(abspath)[0]
     dir, module_name = os.path.split(abspath_without_ext)
-    logging.info('direcotry of target script: %s' % dir)
-    logging.info('module name of target script: %s' % module_name)
+    logger.info('direcotry of target script: %s' % dir)
+    logger.info('module name of target script: %s' % module_name)
     sys.path.append(dir)
     try:
         module = __import__(module_name)
-        logging.info('target module has been loaded')
+        logger.info('target module has been loaded')
     except ImportError:
-        logging.error('No module named %s' % module_name)
+        logger.error('No module named %s' % module_name)
     return [module_name, module]
 
 
-def make_outputdir(root_str, module_name, date_str):
+def make_outputdir(root_str, module_name, date_str, logger=getLogger()):
     tdatetime = datetime.datetime.now()
     date_str = tdatetime.strftime('%Y%m%d_%H%M_%S')
     output_dir = os.path.join(root_str, module_name, date_str)
     try:
         os.makedirs(output_dir)
-        logging.info('%s has been created' % output_dir)
+        logger.info('%s has been created' % output_dir)
     except OSError as e:
-        logging.exception(e)
+        logger.exception(e)
         if e.errno != errno.EEXIST:
             raise
         pass
     return output_dir
 
 
-def save_args(allargs_, output_dir):
+def save_args(allargs_, output_dir, logger=getLogger()):
     allargs = []
     for arg in allargs_:
         pattern = r"^\@"
@@ -114,49 +117,51 @@ def save_args(allargs_, output_dir):
                     allargs.append(line)
         else:
             allargs.append(arg)
-    logging.info('\ncommand line options: %s' % allargs)
+    logger.info('\ncommand line options: %s' % allargs)
     argfile_path = os.path.join(output_dir, 'args.txt')
     with open(argfile_path, 'w') as f:
         for arg in allargs:
             f.write(arg)
             f.write('\n')
-    logging.info('%s has been created' % argfile_path)
+    logger.info('%s has been created' % argfile_path)
 
 
-def save_comment(comment, output_dir, date_str):
+def save_comment(comment, output_dir, date_str, logger=getLogger()):
     if comment is not None:
         comment_file_path = os.path.join(
             output_dir, 'comment_%s.txt' % date_str
         )
         with open(comment_file_path, 'w') as f:
             f.write(comment)
-        logging.info('%s has been created' % comment_file_path)
+        logger.info('%s has been created' % comment_file_path)
 
 
-def save_io_to_json(io_params, io_files, output_dir, date_str):
+def save_io_to_json(
+    io_params, io_files, output_dir, date_str, logger=getLogger()
+):
     io_params_json_path = os.path.join(
         output_dir, 'io_params_%s.json' % date_str
     )
     with open(io_params_json_path, 'w') as f:
         f.write(io_params)
-    logging.info('%s has been created' % io_params_json_path)
+    logger.info('%s has been created' % io_params_json_path)
     io_files_json_path = os.path.join(
         output_dir, 'io_files_%s.json' % date_str
     )
     with open(io_files_json_path, 'w') as f:
         f.write(io_files)
-    logging.info('%s has been created' % io_files_json_path)
+    logger.info('%s has been created' % io_files_json_path)
     io_files_dict = json.loads(io_files)
     return io_files_dict
 
 
-def make_symboliclink(symlink_list, output_dir, dir_name):
+def make_symboliclink(symlink_list, output_dir, dir_name, logger=getLogger()):
     input_files_link_dir = os.path.join(output_dir, dir_name)
     try:
         os.makedirs(input_files_link_dir)
-        logging.info('%s has been created' % input_files_link_dir)
+        logger.info('%s has been created' % input_files_link_dir)
     except OSError as e:
-        logging.exception(e)
+        logger.exception(e)
         if e.errno != errno.EEXIST:
             raise
         pass
@@ -164,18 +169,18 @@ def make_symboliclink(symlink_list, output_dir, dir_name):
         if os.path.exists(source):
             target_path = os.path.join(input_files_link_dir, target)
             os.symlink(source, target_path)
-            logging.info(
+            logger.info(
                 'symbolic link %s has been created' % target_path
             )
 
 
-def move_output(output_files, output_dir):
+def move_output(output_files, output_dir, logger=getLogger()):
     output_files_dir = os.path.join(output_dir, 'output_files')
     try:
         os.makedirs(output_files_dir)
-        logging.info('%s has been created' % output_files_dir)
+        logger.info('%s has been created' % output_files_dir)
     except OSError as e:
-        logging.exception(e)
+        logger.exception(e)
         if e.errno != errno.EEXIST:
             raise
         pass
@@ -184,7 +189,7 @@ def move_output(output_files, output_dir):
             ofiles = glob.glob('%s*' % output_file)
             for ofile in ofiles:
                 shutil.move(ofile, output_files_dir)
-                logging.info('%s has been moved' % ofile)
+                logger.info('%s has been moved' % ofile)
 
 
 def main():
@@ -195,29 +200,33 @@ def main():
     args, undefined_argv = parser.parse_known_args()
 
     # ログの出力レベルの設定
+    logger = getLogger(__name__)
     if args.verbose:
-        format = "[%(asctime) -15s]\n%(filename)s,"\
-            "L%(lineno)s:%(levelname)s\t%(message)s"
-        logging.basicConfig(
-            level=logging.INFO,
-            format=format
+        format = Formatter(
+            "\x1b[1;30m[%(asctime) -15s]\n%(filename)s,"
+            "L%(lineno)s:%(levelname)s\t%(message)s\x1b[39;49;0m"
         )
 
+        logger.setLevel(INFO)
+        sh = StreamHandler()
+        sh.setFormatter(format)
+        logger.addHandler(sh)
+
     # 実行するpythonファイルの動的import
-    module_name, module = dynamic_import(args.pyfile)
+    module_name, module = dynamic_import(args.pyfile, logger)
 
     # スクリプト実行日時の文字列を取得
     tdatetime = datetime.datetime.now()
     date_str = tdatetime.strftime('%Y%m%d_%H%M_%S')
 
     # 実験ファイルの出力ディレクトリを作成
-    output_dir = make_outputdir(args.root, module_name, date_str)
+    output_dir = make_outputdir(args.root, module_name, date_str, logger)
 
     # コマンドラインオプションのパース情報をファイルに保存
-    save_args(sys.argv[1:], output_dir)
+    save_args(sys.argv[1:], output_dir, logger)
 
     # コメントファイルの作成
-    save_comment(args.comment, output_dir, date_str)
+    save_comment(args.comment, output_dir, date_str, logger)
 
     # 実行するpythonファイルのコミット情報を出力
     gitlog.write_commitlog(os.path.abspath(args.pyfile), output_dir)
@@ -230,28 +239,30 @@ def main():
         shutil.move(output_dir, new_output_dir)
         output_dir = new_output_dir
         if error_str is not 'KeyboardInterrupted':
-            logging.error('unexpected error at %s' % module_name)
+            logger.error('unexpected error at %s' % module_name)
         else:
-            logging.error('KeyboardInterrupt')
+            logger.error('KeyboardInterrupt')
 
     # 入出力を表示(jsonを想定)
-    logging.info('\n' + io_params.__str__())
-    logging.info('\n' + io_files.__str__())
+    logger.info('\n' + io_params.__str__())
+    logger.info('\n' + io_files.__str__())
 
     # 入出力をjsonファイルに保存
-    io_files_dict = save_io_to_json(io_params, io_files, output_dir, date_str)
+    io_files_dict = save_io_to_json(
+        io_params, io_files, output_dir, date_str, logger
+    )
 
     # 入力ファイルのシンボリックリンクを作成
     make_symboliclink(
-        io_files_dict['input_symlinks'], output_dir, 'input_symlinks'
+        io_files_dict['input_symlinks'], output_dir, 'input_symlinks', logger
     )
 
     # 出力ファイルの移動
-    move_output(io_files_dict['output_files'], output_dir)
+    move_output(io_files_dict['output_files'], output_dir, logger)
 
     # 出力ファイルのシンボリックリンクを作成
     make_symboliclink(
-        io_files_dict['output_symlinks'], output_dir, 'output_symlinks'
+        io_files_dict['output_symlinks'], output_dir, 'output_symlinks', logger
     )
 
 

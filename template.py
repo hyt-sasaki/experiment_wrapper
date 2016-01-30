@@ -1,6 +1,12 @@
 # -*- coding:utf-8 -*-
 import json
 import argparse
+from logging import getLogger
+from logging import StreamHandler, FileHandler
+from logging import INFO, DEBUG
+from logging import Formatter
+from inspect import currentframe
+from os.path import splitext, split
 
 
 class template(object):
@@ -11,6 +17,32 @@ class template(object):
         self.in_symlinks = dict()
         self.out_files = dict()
         self.out_symlinks = dict()
+        pyfile_str = currentframe().f_back.f_code.co_filename
+        abspath_without_ext = splitext(pyfile_str)[0]
+        module_name = split(abspath_without_ext)[1]
+        self.make_logger(module_name, self.args.verbose, self.args.logfile)
+        formatter = Formatter(
+            "[%(asctime) -15s]\n%(filename)s,"
+            "L%(lineno)s:%(levelname)s\t%(message)s"
+        )
+        self.set_logger_format(formatter)
+
+    def make_logger(self, name, level, logfile_name=None):
+        self.logger = getLogger(name)
+        self.logger.setLevel(DEBUG)
+        sh = StreamHandler()
+        sh.setLevel(level)
+        self.logger.addHandler(sh)
+        if logfile_name is not None:
+            fh = FileHandler(logfile_name, 'w')
+            fh.setLevel(DEBUG)
+            self.logger.addHandler(fh)
+            self.out_files['log'] = logfile_name
+        self.logger.propagate = False
+
+    def set_logger_format(self, formatter):
+        for handler in self.logger.handlers:
+            handler.setFormatter(formatter)
 
     def make_output_json(self):
         io_params_dict = {

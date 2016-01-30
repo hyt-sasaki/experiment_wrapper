@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 import argparse
-import logging
 from exp_wrapper.template import template    # パスが通った場所にtemplate.py等を配置しておく
 
 
@@ -14,16 +13,11 @@ class Example(template):        # templateを継承
 
     # 基本的な処理内容はexcute(self)に記述する
     def execute(self):
-        # logging.info(msg)の情報を出力するかどうか
-        # self.in_paramsにはmake_parserで取得したコマンドライン引数が格納される
-        if self.in_params['verbose']:
-            logging.basicConfig(level=logging.INFO)
-
         # コマンドライン引数の情報を取得
         x = self.args.x
-        logging.info('x = %.2f' % x)
+        self.logger.info('x = %.2f' % x)
         y = self.args.y
-        logging.info('y = %.2f' % y)
+        self.logger.info('y = %.2f' % y)
 
         # jsonファイルに書き込む情報としてx, yの値を登録
         self.in_params['x'] = x
@@ -31,7 +25,7 @@ class Example(template):        # templateを継承
 
         # 計算
         ans = x + y
-        logging.info('x + y = %.2f' % ans)
+        self.logger.info('x + y = %.2f' % ans)
 
         # jsonファイルに書き込む情報としてansの値を登録
         self.out_params['x+y'] = ans
