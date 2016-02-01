@@ -102,7 +102,12 @@ def main(argv):
     try:
         obj.execute()
     except Exception:
-        error = 'unexpected_error'
+        import traceback
+        import sys
+        obj.logger.error(traceback.format_exc())
+        exc_type = sys.exc_info()[0]
+        exc_type_str = exc_type.__name__
+        error = exc_type_str
     except KeyboardInterrupt:
         error = 'KeyboardInterrupted'
     return obj.make_output_json(), error

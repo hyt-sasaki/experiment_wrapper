@@ -20,17 +20,17 @@ class Example(template.Main):        # templateを継承
         self.in_params['y'] = y
 
         # 計算
-        ans = x + y
-        self.logger.info('x + y = %.2f' % ans)
+        ans = x / y
+        self.logger.info('x / y = %.2f' % ans)
 
         # jsonファイルに書き込む情報としてansの値を登録
-        self.out_params['x+y'] = ans
+        self.out_params['x/y'] = ans
 
         # 計算結果をファイルに出力
         if self.args.output is not None:
             with open(self.args.output, 'w') as f:
-                f.write('add operation\n')
-                f.write('%.2f + %.2f = %.2f' % (x, y, ans))
+                f.write('divide operation\n')
+                f.write('%.2f / %.2f = %.2f' % (x, y, ans))
             # 出力ファイルをself.out_filesに格納
             # これによって, 出力ファイルが, experiment.pyで
             # 作成されたディレクトリに移動される
@@ -42,17 +42,17 @@ class Example(template.Main):        # templateを継承
         # parserの設定
         parser_decsription = """
         Example script for experiment.py
-        This script calculate sum of x and y.
+        This script calculate division of x by y.
         """
         parser.description = parser_decsription
         parser.prog = 'example'
-        x_help = 'the first argument of add operation'
+        x_help = 'the first argument of divide operation'
         parser.add_argument(
             '-x',
             type=float,
             help=x_help
         )
-        y_help = 'the second argument of add operation'
+        y_help = 'the second argument of divide operation'
         parser.add_argument(
             '-y',
             type=float,
@@ -75,9 +75,18 @@ def main(argv):
     error = None
     try:
         obj.execute()
-    except Exception, e:
-        print e.message
-        error = e.message.__str__()
+    except Exception:
+        import traceback
+        import sys
+        obj.logger.error(traceback.format_exc())
+        exc_type = sys.exc_info()[0]
+        exc_type_str = exc_type.__name__
+        error = exc_type_str
+    # ファイルハンドラを閉じる
+    from logging import FileHandler
+    for handler in obj.logger.handlers:
+        if type(handler) is FileHandler:
+            handler.close()
     return obj.make_output_json(), error
 
 
