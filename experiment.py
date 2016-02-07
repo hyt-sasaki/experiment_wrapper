@@ -39,9 +39,9 @@ def make_parser():
     target python script to excute
     """
     parser.add_argument(
-        '+p', '++pyfile',
+        'pyfile',
         type=str,
-        required=True,
+        metavar='python_script',
         help=pyfile_help
     )
 
