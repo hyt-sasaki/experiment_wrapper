@@ -212,14 +212,7 @@ def move_logfile(logfile, output_dir):
             shutil.move(logfile, output_files_dir)
 
 
-def main():
-    # パーサーの生成
-    parser = make_parser()
-
-    # コマンドラインオプションをパース
-    args, undefined_argv = parser.parse_known_args()
-
-    # ログの出力レベルの設定
+def make_logger(logfile, verbose):
     logger = getLogger(__name__)
     format_str = \
         "[%(asctime) -15s]\n%(filename)s," \
@@ -230,14 +223,26 @@ def main():
     logger.setLevel(DEBUG)
     sh = StreamHandler()
     sh.setFormatter(color_format)
-    sh.setLevel(args.verbose)
+    sh.setLevel(verbose)
     logger.addHandler(sh)
-    if args.logfile is not None:
-        fh = FileHandler(args.logfile, 'w')
+    if logfile is not None:
+        fh = FileHandler(logfile, 'w')
         fh.setLevel(DEBUG)
         format = Formatter(format_str)
         fh.setFormatter(format)
         logger.addHandler(fh)
+    return logger
+
+
+def main():
+    # パーサーの生成
+    parser = make_parser()
+
+    # コマンドラインオプションをパース
+    args, undefined_argv = parser.parse_known_args()
+
+    # ログの出力レベルの設定
+    logger = make_logger(args.logfile, args.verbose)
 
     # 実行するpythonファイルの動的import
     module_name, module = dynamic_import(args.pyfile, logger)
