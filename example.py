@@ -16,15 +16,15 @@ class Example(template.Main):        # templateを継承
         self.logger.info('y = %.2f' % y)
 
         # jsonファイルに書き込む情報としてx, yの値を登録
-        self.in_params['x'] = x
-        self.in_params['y'] = y
+        self.in_params['devidend'] = x
+        self.in_params['divisor'] = y
 
         # 計算
         ans = x / y
         self.logger.info('x / y = %.2f' % ans)
 
         # jsonファイルに書き込む情報としてansの値を登録
-        self.out_params['x/y'] = ans
+        self.out_params['devidend/divisor'] = ans
 
         # 計算結果をファイルに出力
         if self.args.output is not None:
@@ -48,14 +48,16 @@ class Example(template.Main):        # templateを継承
         parser.prog = 'example'
         x_help = 'the first argument of divide operation'
         parser.add_argument(
-            '-x',
+            'x',
             type=float,
+            metavar='DIVIDEND',
             help=x_help
         )
         y_help = 'the second argument of divide operation'
         parser.add_argument(
-            '-y',
+            'y',
             type=float,
+            metavar='DIVISOR',
             help=y_help
         )
         output_help = 'output filename'
