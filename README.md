@@ -4,8 +4,8 @@ Wrapper script for experimantal codes.
 ## 想定している使用方法
 gitlog.py，template.pyは  
 pythonのパスが通った場所に置く, もしくはシンボリックを張る.  
-例)/usr/local/lib/python2.7/dist-packagesにexp_wrapperというフォルダを作成  
-exp_wrapper以下のファイル構成  
+例)/usr/local/lib/python2.7/dist-packagesにexp\_wrapperというフォルダを作成  
+exp\_wrapper以下のファイル構成  
 .  
 ├── \_\_init\_\_.py  
 ├── gitlog.py  
@@ -25,13 +25,13 @@ experiment.pyのコマンドラインオプションと
 experiment.pyのオプションは, prefixが'+'になっている.  
 
 ## 実行例
-experiment +v +c 'this is an example.' +p example.py -x 1.2 -y 3.1 -o result.txt
+experiment +v 30 +c 'this is an example.'  example.py -o result.txt 10.0 2.2
 
 ## 依存関係
 gitlog.pyは, GitPythonを使用しているため,
 gitのログを残すためにはGitPythonをインストールする必要がある.
 
 開発ソース
-https://github.com/gitpython-developers/GitPython
+https://github.com/gitpython-developers/GitPython  
 ドキュメント:
 https://gitpython.readthedocs.org/en/stable/

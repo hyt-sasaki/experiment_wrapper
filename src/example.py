@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from exp_wrapper import template    # パスが通った場所にtemplate.py等を配置しておく
+from argparse import ArgumentDefaultsHelpFormatter
 
 
 class Example(template.Main):        # templateを継承
@@ -11,20 +12,20 @@ class Example(template.Main):        # templateを継承
     def execute(self):
         # コマンドライン引数の情報を取得
         x = self.args.x
-        self.logger.info('x = %.2f' % x)
+        self.logger.debug('x = %.2f' % x)
         y = self.args.y
-        self.logger.info('y = %.2f' % y)
+        self.logger.debug('y = %.2f' % y)
 
         # jsonファイルに書き込む情報としてx, yの値を登録
-        self.in_params['x'] = x
-        self.in_params['y'] = y
+        self.in_params['devidend'] = x
+        self.in_params['divisor'] = y
 
         # 計算
-        ans = x / y
+        ans = devide(x, y)
         self.logger.info('x / y = %.2f' % ans)
 
         # jsonファイルに書き込む情報としてansの値を登録
-        self.out_params['x/y'] = ans
+        self.out_params['devidend/divisor'] = ans
 
         # 計算結果をファイルに出力
         if self.args.output is not None:
@@ -41,21 +42,24 @@ class Example(template.Main):        # templateを継承
         parser = super(Example, self).make_parser()
         # parserの設定
         parser_decsription = """
-        Example script for experiment.py
-        This script calculate division of x by y.
+        Example script for experiment.py.
+        This script calculate division.
         """
         parser.description = parser_decsription
         parser.prog = 'example'
+        parser.formatter_class = ArgumentDefaultsHelpFormatter
         x_help = 'the first argument of divide operation'
         parser.add_argument(
-            '-x',
+            'x',
             type=float,
+            metavar='DIVIDEND',
             help=x_help
         )
         y_help = 'the second argument of divide operation'
         parser.add_argument(
-            '-y',
+            'y',
             type=float,
+            metavar='DIVISOR',
             help=y_help
         )
         output_help = 'output filename'
@@ -67,6 +71,10 @@ class Example(template.Main):        # templateを継承
         )
 
         return parser
+
+
+def devide(devidend, devisor):
+    return devidend / devisor
 
 
 # main(argv)は, ほぼ手を加える必要はない

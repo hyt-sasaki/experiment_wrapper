@@ -32,7 +32,7 @@ def make_parser():
         description=parser_description,
         prefix_chars='+',
         fromfile_prefix_chars='@',
-        prog='experiment_wrapper'
+        prog='experiment'
     )
 
     pyfile_help = """
