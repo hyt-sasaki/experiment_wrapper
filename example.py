@@ -12,9 +12,9 @@ class Example(template.Main):        # templateを継承
     def execute(self):
         # コマンドライン引数の情報を取得
         x = self.args.x
-        self.logger.info('x = %.2f' % x)
+        self.logger.debug('x = %.2f' % x)
         y = self.args.y
-        self.logger.info('y = %.2f' % y)
+        self.logger.debug('y = %.2f' % y)
 
         # jsonファイルに書き込む情報としてx, yの値を登録
         self.in_params['devidend'] = x
