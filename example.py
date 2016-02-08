@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from exp_wrapper import template    # パスが通った場所にtemplate.py等を配置しておく
+from argparse import ArgumentDefaultsHelpFormatter
 
 
 class Example(template.Main):        # templateを継承
@@ -46,6 +47,7 @@ class Example(template.Main):        # templateを継承
         """
         parser.description = parser_decsription
         parser.prog = 'example'
+        parser.formatter_class = ArgumentDefaultsHelpFormatter
         x_help = 'the first argument of divide operation'
         parser.add_argument(
             'x',
