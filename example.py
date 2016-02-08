@@ -42,8 +42,8 @@ class Example(template.Main):        # templateを継承
         parser = super(Example, self).make_parser()
         # parserの設定
         parser_decsription = """
-        Example script for experiment.py
-        This script calculate division of x by y.
+        Example script for experiment.py.
+        This script calculate division.
         """
         parser.description = parser_decsription
         parser.prog = 'example'
