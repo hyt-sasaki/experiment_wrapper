@@ -20,7 +20,7 @@ class Example(template.Main):        # templateを継承
         self.in_params['divisor'] = y
 
         # 計算
-        ans = x / y
+        ans = devide(x, y)
         self.logger.info('x / y = %.2f' % ans)
 
         # jsonファイルに書き込む情報としてansの値を登録
@@ -69,6 +69,10 @@ class Example(template.Main):        # templateを継承
         )
 
         return parser
+
+
+def devide(devidend, devisor):
+    return devidend / devisor
 
 
 # main(argv)は, ほぼ手を加える必要はない
