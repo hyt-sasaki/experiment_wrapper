@@ -8,7 +8,8 @@ Wrapper script for experimantal codes.
 - 実験時の各種パラメータをjsonファイルに出力
 - gitを用いている場合, 実行時のコミットIDをファイルに保存
 - 実行時に出力内容をログファイルに保存
-などがある.  
+
+などがある.
 
 ## インストール方法
 $> git clone https://github.com/hyt-sasaki/experiment_wrapper.git  

@@ -23,7 +23,7 @@ def make_parser():
     This script manage input/output parameters and files.\n
     If the target script is managed by git,
     this script also output the git repository infomation.
-    Inorder to distinguish this experiment wrapper script
+    In order to distinguish this experiment wrapper script
     option from the target script option,
     the prefix chars of this script option is set to '+'.
     """

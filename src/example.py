@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from exp_wrapper import template    # パスが通った場所にtemplate.py等を配置しておく
+from exp_wrapper import template
 from argparse import ArgumentDefaultsHelpFormatter
 
 
