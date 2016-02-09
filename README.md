@@ -19,7 +19,7 @@ $> sudo python setup.py install
 
 ## 実行例
 上記の続きで(experiment_wrapperディレクトリにいる状態で)  
-$> experiment +v 30 +c 'this is an example.' src/example.py -o result.txt 10.0 2.2
+$> experiment +v 10 +c 'this is an example.' src/example.py Example -o result.txt 10.0 2.1
 
 ## 使用方法
 experimentスクリプトで読み込むpythonファイルに  
