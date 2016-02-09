@@ -19,14 +19,16 @@ $> sudo python setup.py install
 
 ## 実行例
 上記の続きで(experiment_wrapperディレクトリにいる状態で)  
-$> experiment +v 10 +c 'this is an example.' src/example.py Example -o result.txt 10.0 2.1
+$> experiment +v 10 +c 'this is an example.' src/example.py Example -o result.txt 10.0 2.1  
+詳しくは  
+$> experiment +h  
+のヘルプを参照.
 
 ## 使用方法
 experimentスクリプトで読み込むpythonファイルに  
 1. exp_wrapper.template.Mainを継承したクラスを定義する.  
 2. メソッドexcute(self)に行いたい処理を記述する.  
 3. コマンドライン引数をmake_parser(self)で定義する.
-4. main(args)関数を定義する.  
 
 基本的には, example.pyを参考に.  
 
