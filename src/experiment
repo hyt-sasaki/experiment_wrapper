@@ -4,7 +4,7 @@ import argparse
 import os
 import sys
 import datetime
-from exp_wrapper import gitlog
+from exp_wrapper import gitlog, template
 import json
 import shutil
 import glob
@@ -45,6 +45,16 @@ def make_parser():
         help=pyfile_help
     )
 
+    class_help = """
+    target python class to excute
+    """
+    parser.add_argument(
+        'classname',
+        type=str,
+        metavar='class_name',
+        help=class_help
+    )
+
     root_help = """
     root directory of the experiment
     """
@@ -83,19 +93,24 @@ def make_parser():
     return parser
 
 
-def dynamic_import(pyfile_str, logger=getLogger()):
+def dynamic_import(pyfile_str, class_str, logger=getLogger()):
     abspath = os.path.abspath(pyfile_str)
     abspath_without_ext = os.path.splitext(abspath)[0]
     dir, module_name = os.path.split(abspath_without_ext)
+    class_name = class_str
     logger.info('direcotry of target script: %s' % dir)
     logger.info('module name of target script: %s' % module_name)
+    logger.info('name of target class: %s' % class_name)
     sys.path.append(dir)
+    logger.info('modulename: %s' % module_name)
     try:
-        module = __import__(module_name)
-        logger.info('target module has been loaded')
-    except ImportError:
+        class_ = getattr(__import__(module_name), class_name)
+        logger.info('target class has been loaded')
+    except ImportError as e:
+        logger.exception(e)
         logger.error('No module named %s' % module_name)
-    return [module_name, module]
+    class_name = '%s.%s' % (module_name, class_name)
+    return [class_name, class_]
 
 
 def make_outputdir(root_str, module_name, date_str, logger=getLogger()):
@@ -245,7 +260,7 @@ def main():
     logger = make_logger(args.logfile, args.verbose)
 
     # 実行するpythonファイルの動的import
-    module_name, module = dynamic_import(args.pyfile, logger)
+    module_name, class_ = dynamic_import(args.pyfile, args.classname, logger)
 
     # スクリプト実行日時の文字列を取得
     tdatetime = datetime.datetime.now()
@@ -264,7 +279,8 @@ def main():
     gitlog.write_commitlog(os.path.abspath(args.pyfile), output_dir)
 
     # pythonファイルを実行
-    (io_params, io_files), error_str = module.main(undefined_argv)
+    obj = class_(undefined_argv)
+    (io_params, io_files), error_str = template.main(obj)
 
     if error_str:
         new_output_dir = output_dir + '_' + error_str

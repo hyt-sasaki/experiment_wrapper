@@ -94,9 +94,7 @@ class Main(object):
         return parser
 
 
-def main(argv):
-    obj = Main(argv)
-
+def main(obj):
     error = None
 
     try:

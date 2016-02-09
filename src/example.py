@@ -77,29 +77,9 @@ def devide(devidend, devisor):
     return devidend / devisor
 
 
-# main(argv)は, ほぼ手を加える必要はない
-def main(argv):
-    obj = Example(argv)     # この部分のみ, クラス名を必要に応じて書き換え
-    error = None
-    try:
-        obj.execute()
-    except Exception:
-        import traceback
-        import sys
-        obj.logger.error(traceback.format_exc())
-        exc_type = sys.exc_info()[0]
-        exc_type_str = exc_type.__name__
-        error = exc_type_str
-    # ファイルハンドラを閉じる
-    from logging import FileHandler
-    for handler in obj.logger.handlers:
-        if type(handler) is FileHandler:
-            handler.close()
-    return obj.make_output_json(), error
-
-
 # experiment.pyを用いずに, 本スクリプトを直接実行する場合は
 # こちらが実行される
 if __name__ == '__main__':
     import sys
-    main(sys.argv[1:])
+    obj = Example(sys.argv[1:])
+    template.main(obj)
