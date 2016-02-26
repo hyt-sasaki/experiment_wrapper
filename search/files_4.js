@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['template_2epy',['template.py',['../d6/d98/template_8py.html',1,'']]]
+  ['setup_2epy',['setup.py',['../da/dab/setup_8py.html',1,'']]]
 ];

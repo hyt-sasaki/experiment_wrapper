@@ -10,9 +10,10 @@ var indexSectionsWithContent =
   0: "_adegilmnoprstvw",
   1: "egm",
   2: "egst",
-  3: "_egst",
+  3: "_egrst",
   4: "_demsw",
-  5: "ailnoprsv"
+  5: "ailnoprsv",
+  6: "e"
 };
 
 var indexSectionNames =
@@ -22,7 +23,8 @@ var indexSectionNames =
   2: "namespaces",
   3: "files",
   4: "functions",
-  5: "variables"
+  5: "variables",
+  6: "pages"
 };
 
 function convertToId(search)

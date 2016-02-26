@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>experiment wrapper: src/exp_wrapper/__init__.py ソースファイル</title>
+<title>experiment wrapper: experiment</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -37,10 +37,10 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'検索');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="../../index.html"><span>総合概要</span></a></li>
-      <li><a href="../../pages.html"><span>諸情報</span></a></li>
+      <li class="current"><a href="../../pages.html"><span>諸情報</span></a></li>
       <li><a href="../../namespaces.html"><span>パッケージ</span></a></li>
       <li><a href="../../annotated.html"><span>クラス</span></a></li>
-      <li class="current"><a href="../../files.html"><span>ファイル</span></a></li>
+      <li><a href="../../files.html"><span>ファイル</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -59,11 +59,6 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'検索');
       </li>
     </ul>
   </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="../../files.html"><span>ファイル一覧</span></a></li>
-    </ul>
-  </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -78,18 +73,47 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'検索');
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_2d284961b1686b8ecb956a3fdce90d37.html">exp_wrapper</a></li>  </ul>
-</div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">__init__.py</div>  </div>
+<div class="title">experiment </div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="../../d3/d9a/____init_____8py.html">[詳解]</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno"><a class="line" href="../../d0/d16/namespaceexp__wrapper.html">    1</a></span>&#160;<span class="comment">## @namespace exp_wrapper exp_wrapper</span></div>
-</div><!-- fragment --></div><!-- contents -->
+<div class="textblock"><p>Wrapper script for experimantal codes.</p>
+<h2>概要</h2>
+<p>実験用のpythonコードを引数として, 様々な処理を行う. 主な機能としては,</p>
+<ul>
+<li>実験結果保存用のディレクトリを作成</li>
+<li>実験時の各種パラメータをjsonファイルに出力</li>
+<li>gitを用いている場合, 実行時のコミットIDをファイルに保存</li>
+<li>実行時に出力内容をログファイルに保存</li>
+</ul>
+<p>などがある.</p>
+<h2>インストール方法</h2>
+<p>$&gt; git clone <a href="https://github.com/hyt-sasaki/experiment_wrapper.git">https://github.com/hyt-sasaki/experiment_wrapper.git</a> $&gt; cd experiment_wrapper $&gt; python <a class="el" href="../../da/dab/setup_8py.html">setup.py</a> install もしくは $&gt; sudo python <a class="el" href="../../da/dab/setup_8py.html">setup.py</a> install</p>
+<h2>実行例</h2>
+<p>上記の続きで(experiment_wrapperディレクトリにいる状態で) $&gt; experiment +v 10 +c 'this is an example.' <a class="el" href="../../d5/d0b/example_8py.html">src/example.py</a> Example -o result.txt 10.0 2.1 詳しくは $&gt; experiment +h のヘルプを参照.</p>
+<h2>使用方法</h2>
+<p>experimentスクリプトで読み込むpythonファイルに</p>
+<ol type="1">
+<li>exp_wrapper.template.Mainを継承したクラスを定義する.</li>
+<li>メソッドexcute(self)に行いたい処理を記述する.</li>
+<li>コマンドライン引数をmake_parser(self)で定義する.</li>
+</ol>
+<p>基本的には, example.pyを参考に.</p>
+<p>exp_wrapper.template.Mainには次のメンバ変数が用意されている.</p>
+<ol type="1">
+<li>in_params: 入力パラメータを保存する辞書. 初期状態ではコマンドライン引数の値が保存される.</li>
+<li>out_params: 出力パラメータを保存する辞書.</li>
+<li>in_symlinks: シンボリックリンクを張りたい入力ファイル名を保存する辞書.</li>
+<li>out_symlinks: シンボリックリンクを張りたい出力ファイル名を保存する辞書.</li>
+<li>out_files: 出力ファイル名を保存する辞書.</li>
+</ol>
+<p>これらのメンバ変数の内容はjsonファイルに出力される. また, in_symlinksおよびout_symlinksに保存されたファイルに対しては, 出力ディレクトリに対象ファイルのリンクが張られる. out_filesに保存されたファイルに関しては, 出力ディレクトリに自動的に移動される. </p>
+<h2>依存関係</h2>
+<p>gitlog.pyはGitPythonを使用しているため, インストールがされていない場合はsetup.pyで自動にインストールを行う.</p>
+<p>開発ソース <a href="https://github.com/gitpython-developers/GitPython">https://github.com/gitpython-developers/GitPython</a> ドキュメント: <a href="https://gitpython.readthedocs.org/en/stable/">https://gitpython.readthedocs.org/en/stable/</a> </p>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 2016年02月27日(土) 02時07分22秒作成 - experiment wrapper / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
