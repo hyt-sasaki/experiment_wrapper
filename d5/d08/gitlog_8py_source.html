@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.6"/>
+<title>Heavy Ion Radio Therapy Project: src/exp_wrapper/gitlog.py ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Heavy Ion Radio Therapy Project
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.6 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "../../search",false,'検索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="../../index.html"><span>総合概要</span></a></li>
+      <li><a href="../../namespaces.html"><span>パッケージ</span></a></li>
+      <li><a href="../../annotated.html"><span>クラス</span></a></li>
+      <li class="current"><a href="../../files.html"><span>ファイル</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="../../search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="検索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="../../search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="../../files.html"><span>ファイル一覧</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全て</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>クラス</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>名前空間</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>ファイル</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>関数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>変数</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_2d284961b1686b8ecb956a3fdce90d37.html">exp_wrapper</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">gitlog.py</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="../../d5/d08/gitlog_8py.html">[詳解]</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno"><a class="line" href="../../d9/d82/namespaceexp__wrapper_1_1gitlog.html">    1</a></span>&#160;<span class="comment"># -*- coding:utf-8 -*-</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="keyword">import</span> datetime</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">import</span> codecs</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">import</span> os</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">import</span> git</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html">    8</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html">gitlog</a>(object):</div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a8d2c37f85342ee7e4464ec652df98dcb">    9</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a8d2c37f85342ee7e4464ec652df98dcb">__init__</a>(self, repo, branch=None):</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#ad8762d4897cc4959d416dcdcd6218376">   10</a></span>&#160;        self.<a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#ad8762d4897cc4959d416dcdcd6218376">repo</a> = repo</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a20104857aee45f192e94f550e42412ee">   11</a></span>&#160;        self.<a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a20104857aee45f192e94f550e42412ee">file</a> = file</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keywordflow">if</span> branch <span class="keywordflow">is</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            branch = self.repo.active_branch.name</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#aca002b596545006915d5e302900c342b">   15</a></span>&#160;            self.<a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#aca002b596545006915d5e302900c342b">latest_commit</a> =\</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                repo.iter_commits(branch, max_count=100).next()</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordflow">except</span> Exception <span class="keyword">as</span> e:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keywordflow">print</span> e.message</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            self.<a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#aca002b596545006915d5e302900c342b">latest_commit</a> = <span class="keywordtype">None</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <span class="keywordflow">raise</span> e</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a3a60ba8fd8850bcdb785689e149804e9">   22</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a3a60ba8fd8850bcdb785689e149804e9">write_commit</a>(self, f, verbose=False):</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordflow">if</span> self.<a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#aca002b596545006915d5e302900c342b">latest_commit</a> <span class="keywordflow">is</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keywordflow">if</span> verbose:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keywordflow">print</span> <span class="stringliteral">&#39;最新のコミットが存在しません&#39;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        hash_line = <span class="stringliteral">u&#39;ハッシュID: %s \n&#39;</span> % (self.latest_commit.hexsha)</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        message_line = <span class="stringliteral">u&#39;メッセージ: %s&#39;</span> % (self.latest_commit.message)</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        committed_date = self.latest_commit.committed_date</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        committed_date = datetime.datetime.fromtimestamp(committed_date)</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        committed_date_line = <span class="stringliteral">u&#39;コミット日時: %s \n&#39;</span> % (committed_date)</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        stats_line = <span class="stringliteral">u&#39;Diff: 実行時のソースコードと上記コミットとの差分\n%s&#39;</span> % \</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            (self.repo.git.diff(self.latest_commit.tree))</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        f.write(hash_line)</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        f.write(message_line)</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        f.write(committed_date_line)</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        f.write(<span class="stringliteral">&#39;----------------\n&#39;</span>)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        f.write(stats_line)</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">if</span> verbose:</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">u&#39;%s の書き込みに成功しました&#39;</span> % f.name</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&#39;============&#39;</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keywordflow">print</span> hash_line</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">print</span> message_line</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">print</span> committed_date_line</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">print</span> stats_line</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&#39;============&#39;</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="../../d9/d82/namespaceexp__wrapper_1_1gitlog.html#aa8a7643fbbb8b44faf059bd424bdfdea">   50</a></span>&#160;<span class="keyword">def </span><a class="code" href="../../d9/d82/namespaceexp__wrapper_1_1gitlog.html#aa8a7643fbbb8b44faf059bd424bdfdea">make_repo</a>(script_path, depth=5):</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    dir = os.path.dirname(script_path)</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    path = os.path.abspath(dir)</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    repo_exist = <span class="keyword">False</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">for</span> i <span class="keywordflow">in</span> range(depth):</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            repo = git.Repo(path)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            repo_exist = <span class="keyword">True</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">break</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">except</span> git.exc.InvalidGitRepositoryError:</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            path = os.path.split(path)[0]</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordflow">if</span> <span class="keywordflow">not</span> repo_exist:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">return</span> <span class="keywordtype">None</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    tracked_files = [</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        os.path.join(repo.working_dir, fn[0])</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">for</span> fn <span class="keywordflow">in</span> repo.index.entries.keys()</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    ]</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    script_abspath = os.path.abspath(script_path)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    right_repo = <span class="keyword">False</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">for</span> tracked_file <span class="keywordflow">in</span> tracked_files:</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">if</span> os.path.samefile(tracked_file, script_abspath):</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            right_repo = <span class="keyword">True</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <span class="keywordflow">break</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">if</span> <span class="keywordflow">not</span> right_repo:</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">return</span> <span class="keywordtype">None</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">return</span> repo</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">def </span><a class="code" href="../../d9/d82/namespaceexp__wrapper_1_1gitlog.html#ae84bcc8380f9b559ab210753f55f0f38">write_commitlog</a>(</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    script_path, filepath=<span class="keywordtype">None</span>, branch=<span class="keywordtype">None</span>, verbose=<span class="keyword">False</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="../../d9/d82/namespaceexp__wrapper_1_1gitlog.html#ae84bcc8380f9b559ab210753f55f0f38">   86</a></span>&#160;):</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment"># リポジトリの取得</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    repo = <a class="code" href="../../d9/d82/namespaceexp__wrapper_1_1gitlog.html#aa8a7643fbbb8b44faf059bd424bdfdea">make_repo</a>(script_path)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="comment"># リポジトリが存在しない場合は終了</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">if</span> repo <span class="keywordflow">is</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">if</span> verbose:</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&#39;リポジトリが存在しません&#39;</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="comment"># ブランチの設定</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordflow">if</span> branch <span class="keywordflow">is</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        branch = repo.active_branch.name</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="comment"># filepathがNoneもしくはディレクトリの場合には，自動的にファイル名を作成</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordflow">if</span> filepath <span class="keywordflow">is</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        filepath = <span class="stringliteral">&#39;./&#39;</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">if</span> os.path.isdir(filepath):</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keyword">import</span> datetime</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        tdatetime = datetime.datetime.now()</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        date_str = tdatetime.strftime(<span class="stringliteral">&#39;%Y%m%d_%H%M&#39;</span>)</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        fpath = <span class="stringliteral">&#39;commitlog_%s.txt&#39;</span> % date_str</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">if</span> filepath <span class="keywordflow">is</span> <span class="keywordflow">not</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            dir = filepath</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        fpath = os.path.join(dir, fpath)</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordflow">else</span>:</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        fpath = filepath</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="comment"># gitlogインスタンスを生成</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        glog = <a class="code" href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html">gitlog</a>(repo, branch)</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="comment"># 書き込みファイルをutf-8で開く</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        f = codecs.open(fpath, <span class="stringliteral">&#39;w&#39;</span>, <span class="stringliteral">&#39;utf-8&#39;</span>)</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="comment"># commitlogの書き込み</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        glog.write_commit(f, verbose)</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="comment"># ファイルを閉じる</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        f.close()</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">except</span> Exception <span class="keyword">as</span> e:</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">print</span> e.message</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">print</span> <span class="stringliteral">&#39;コミットログファイルの生成に失敗しました&#39;</span></div>
+<div class="ttc" id="classexp__wrapper_1_1gitlog_1_1gitlog_html"><div class="ttname"><a href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html">exp_wrapper.gitlog.gitlog</a></div><div class="ttdef"><b>Definition:</b> <a href="../../d5/d08/gitlog_8py_source.html#l00008">gitlog.py:8</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1gitlog_1_1gitlog_html_a3a60ba8fd8850bcdb785689e149804e9"><div class="ttname"><a href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a3a60ba8fd8850bcdb785689e149804e9">exp_wrapper.gitlog.gitlog.write_commit</a></div><div class="ttdeci">def write_commit</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/d08/gitlog_8py_source.html#l00022">gitlog.py:22</a></div></div>
+<div class="ttc" id="namespaceexp__wrapper_1_1gitlog_html_ae84bcc8380f9b559ab210753f55f0f38"><div class="ttname"><a href="../../d9/d82/namespaceexp__wrapper_1_1gitlog.html#ae84bcc8380f9b559ab210753f55f0f38">exp_wrapper.gitlog.write_commitlog</a></div><div class="ttdeci">def write_commitlog</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/d08/gitlog_8py_source.html#l00086">gitlog.py:86</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1gitlog_1_1gitlog_html_a20104857aee45f192e94f550e42412ee"><div class="ttname"><a href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a20104857aee45f192e94f550e42412ee">exp_wrapper.gitlog.gitlog.file</a></div><div class="ttdeci">file</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/d08/gitlog_8py_source.html#l00011">gitlog.py:11</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1gitlog_1_1gitlog_html_a8d2c37f85342ee7e4464ec652df98dcb"><div class="ttname"><a href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#a8d2c37f85342ee7e4464ec652df98dcb">exp_wrapper.gitlog.gitlog.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/d08/gitlog_8py_source.html#l00009">gitlog.py:9</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1gitlog_1_1gitlog_html_ad8762d4897cc4959d416dcdcd6218376"><div class="ttname"><a href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#ad8762d4897cc4959d416dcdcd6218376">exp_wrapper.gitlog.gitlog.repo</a></div><div class="ttdeci">repo</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/d08/gitlog_8py_source.html#l00010">gitlog.py:10</a></div></div>
+<div class="ttc" id="namespaceexp__wrapper_1_1gitlog_html_aa8a7643fbbb8b44faf059bd424bdfdea"><div class="ttname"><a href="../../d9/d82/namespaceexp__wrapper_1_1gitlog.html#aa8a7643fbbb8b44faf059bd424bdfdea">exp_wrapper.gitlog.make_repo</a></div><div class="ttdeci">def make_repo</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/d08/gitlog_8py_source.html#l00050">gitlog.py:50</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1gitlog_1_1gitlog_html_aca002b596545006915d5e302900c342b"><div class="ttname"><a href="../../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#aca002b596545006915d5e302900c342b">exp_wrapper.gitlog.gitlog.latest_commit</a></div><div class="ttdeci">latest_commit</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/d08/gitlog_8py_source.html#l00015">gitlog.py:15</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2016年02月27日(土) 00時43分39秒作成 - Heavy Ion Radio Therapy Project / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="../../doxygen.png" alt="doxygen"/>
+</a> 1.8.6
+</small></address>
+</body>
+</html>
