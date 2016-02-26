@@ -1,4 +1,4 @@
 <map id="クラス階層図" name="クラス階層図">
-<area shape="rect" id="node2" href="$d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html" title="exp_wrapper.gitlog.gitlog" alt="" coords="121,5,287,32"/>
-<area shape="rect" id="node3" href="$dc/d27/classexp__wrapper_1_1template_1_1Main.html" title="exp_wrapper.template.Main" alt="" coords="113,56,295,83"/>
+<area shape="rect" id="node2" href="$d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html" title="Gitのコミットログを扱うためのクラス " alt="" coords="121,5,287,32"/>
+<area shape="rect" id="node3" href="$dc/d27/classexp__wrapper_1_1template_1_1Main.html" title="スクリプトのメインとなるテンプレートクラス " alt="" coords="113,56,295,83"/>
 </map>

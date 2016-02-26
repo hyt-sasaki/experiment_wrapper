@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['package_5fdir',['package_dir',['../dd/dc4/namespacesetup.html#abf4f1022dcd783f10f7bd23ec931f32b',1,'setup']]],
-  ['packages',['packages',['../dd/dc4/namespacesetup.html#aada4406eeab94f62c5f72fee617f0b82',1,'setup']]]
+  ['repo',['repo',['../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#ad8762d4897cc4959d416dcdcd6218376',1,'exp_wrapper::gitlog::gitlog']]]
 ];

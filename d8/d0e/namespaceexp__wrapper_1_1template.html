@@ -95,11 +95,13 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'検索');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 クラス</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html">Main</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">スクリプトのメインとなるテンプレートクラス  <a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#details">[詳解]</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
 <tr class="memitem:adb9826f8a91fec38d523d070ffe65f3f"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">main</a></td></tr>
+<tr class="memdesc:adb9826f8a91fec38d523d070ffe65f3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">main関数  <a href="#adb9826f8a91fec38d523d070ffe65f3f">[詳解]</a><br/></td></tr>
 <tr class="separator:adb9826f8a91fec38d523d070ffe65f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">関数詳解</h2>
@@ -117,31 +119,43 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'検索');
       </table>
 </div><div class="memdoc">
 
-<p> <a class="el" href="../../d6/d98/template_8py_source.html">template.py</a> の <a class="el" href="../../d6/d98/template_8py_source.html#l00097">97</a> 行目に定義があります。</p>
-<div class="fragment"><div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">   97</a></span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">def </span><a class="code" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">main</a>(obj):</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    error = <span class="keywordtype">None</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">try</span>:</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        obj.execute()</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">except</span> Exception:</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">import</span> traceback</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keyword">import</span> sys</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        obj.logger.error(traceback.format_exc())</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        exc_type = sys.exc_info()[0]</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        exc_type_str = exc_type.__name__</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        error = exc_type_str</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordflow">except</span> KeyboardInterrupt:</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        error = <span class="stringliteral">&#39;KeyboardInterrupted&#39;</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordflow">return</span> obj.make_output_json(), error</div>
-<div class="ttc" id="namespaceexp__wrapper_1_1template_html_adb9826f8a91fec38d523d070ffe65f3f"><div class="ttname"><a href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">exp_wrapper.template.main</a></div><div class="ttdeci">def main</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00097">template.py:97</a></div></div>
+<p>main関数 </p>
+<p>この関数にtemplate.Mainを継承したオブジェクトを引数として渡し, excute()メソッドを実行する. <br/>
+ excute()内で例外が発生した場合にはロガーにtracebackの内容を出力する.<br/>
+ </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">obj</td><td>template.Mainを継承したオブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>パラメータおよびファイルに関するjsonファイルオブジェクトおよびerrorに関する文字列 </dd></dl>
+
+<p> <a class="el" href="../../d6/d98/template_8py_source.html">template.py</a> の <a class="el" href="../../d6/d98/template_8py_source.html#l00158">158</a> 行目に定義があります。</p>
+<div class="fragment"><div class="line"><a name="l00158"></a><span class="lineno"><a class="line" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">  158</a></span>&#160;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="keyword">def </span><a class="code" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">main</a>(obj):</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    error = <span class="keywordtype">None</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        obj.execute()</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keywordflow">except</span> Exception:</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keyword">import</span> traceback</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="keyword">import</span> sys</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        obj.logger.error(traceback.format_exc())</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        exc_type = sys.exc_info()[0]</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        exc_type_str = exc_type.__name__</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        error = exc_type_str</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keywordflow">except</span> KeyboardInterrupt:</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        error = <span class="stringliteral">&#39;KeyboardInterrupted&#39;</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordflow">return</span> obj.make_output_json(), error</div>
+<div class="ttc" id="namespaceexp__wrapper_1_1template_html_adb9826f8a91fec38d523d070ffe65f3f"><div class="ttname"><a href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">exp_wrapper.template.main</a></div><div class="ttdeci">def main</div><div class="ttdoc">main関数 </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00158">template.py:158</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2016年02月27日(土) 00時43分39秒作成 - Heavy Ion Radio Therapy Project / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2016年02月27日(土) 00時54分16秒作成 - Heavy Ion Radio Therapy Project / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

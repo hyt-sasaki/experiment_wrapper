@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['scripts',['scripts',['../dd/dc4/namespacesetup.html#ac1f45f8d37050b278bf63c812b1130dd',1,'setup']]]
+  ['version',['version',['../dd/dc4/namespacesetup.html#ab177531e7a80674a3db3de2d79eb8be7',1,'setup']]]
 ];

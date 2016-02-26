@@ -88,135 +88,196 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'検索');
 </div><!--header-->
 <div class="contents">
 <a href="../../d6/d98/template_8py.html">[詳解]</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno"><a class="line" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html">    1</a></span>&#160;<span class="comment"># -*- coding:utf-8 -*-</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="keyword">import</span> json</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">import</span> argparse</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">from</span> logging <span class="keyword">import</span> getLogger</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">from</span> logging <span class="keyword">import</span> StreamHandler, FileHandler</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">from</span> logging <span class="keyword">import</span> INFO, DEBUG</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">from</span> logging <span class="keyword">import</span> Formatter</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">from</span> inspect <span class="keyword">import</span> currentframe</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">from</span> os.path <span class="keyword">import</span> splitext, split</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html">   12</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html">Main</a>(object):</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acd9b11b39ddfe12fb1015ef920f6e347">   13</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acd9b11b39ddfe12fb1015ef920f6e347">__init__</a>(self, argv):</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        parser = self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a903af30eb1ece52372bb9febce6873f1">make_parser</a>()</div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#af8b63860684ecb7b1f14bda0ff5ffd2f">   15</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#af8b63860684ecb7b1f14bda0ff5ffd2f">args</a> = parser.parse_args(argv)</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a0b4c50f96c0f9440b8f8009f0ad7c9ef">   16</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a0b4c50f96c0f9440b8f8009f0ad7c9ef">in_params</a> = vars(self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#af8b63860684ecb7b1f14bda0ff5ffd2f">args</a>)</div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a9d60cf6c62887ce46406798c88d63c14">   17</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a9d60cf6c62887ce46406798c88d63c14">out_params</a> = dict()</div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acb83906d8832fe0f0713e93542f21bd5">   18</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acb83906d8832fe0f0713e93542f21bd5">in_symlinks</a> = dict()</div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">   19</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">out_files</a> = dict()</div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#aef6dd10c92ce27c22d1d1a9cff95d44e">   20</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#aef6dd10c92ce27c22d1d1a9cff95d44e">out_symlinks</a> = dict()</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        pyfile_str = currentframe().f_back.f_code.co_filename</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        abspath_without_ext = splitext(pyfile_str)[0]</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        module_name = split(abspath_without_ext)[1]</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2cc703274da6dfa871ee6b1a657dc6e7">make_logger</a>(module_name, self.args.verbose, self.args.logfile)</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        formatter = Formatter(</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <span class="stringliteral">&quot;[%(asctime) -15s]\n%(filename)s,&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="stringliteral">&quot;L%(lineno)s:%(levelname)s\t%(message)s&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        )</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a72d309b21dbcdaf059ada73f5b944daa">set_logger_format</a>(formatter)</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2cc703274da6dfa871ee6b1a657dc6e7">   31</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2cc703274da6dfa871ee6b1a657dc6e7">make_logger</a>(self, name, level, logfile_name=None):</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2e1c2ea9de0065e45135d454b01d88f9">   32</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2e1c2ea9de0065e45135d454b01d88f9">logger</a> = getLogger(name)</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        self.logger.setLevel(DEBUG)</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        sh = StreamHandler()</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        sh.setLevel(level)</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        self.logger.addHandler(sh)</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">if</span> logfile_name <span class="keywordflow">is</span> <span class="keywordflow">not</span> <span class="keywordtype">None</span>:</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            fh = FileHandler(logfile_name, <span class="stringliteral">&#39;w&#39;</span>)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            fh.setLevel(DEBUG)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            self.logger.addHandler(fh)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">out_files</a>[<span class="stringliteral">&#39;log&#39;</span>] = logfile_name</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        self.logger.propagate = <span class="keyword">False</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a72d309b21dbcdaf059ada73f5b944daa">   44</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a72d309b21dbcdaf059ada73f5b944daa">set_logger_format</a>(self, formatter):</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordflow">for</span> handler <span class="keywordflow">in</span> self.logger.handlers:</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            handler.setFormatter(formatter)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a1ae2bd38572875df84c5096fdd3907b2">   48</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a1ae2bd38572875df84c5096fdd3907b2">make_output_json</a>(self):</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        io_params_dict = {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="stringliteral">&#39;input_params&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a0b4c50f96c0f9440b8f8009f0ad7c9ef">in_params</a>,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            <span class="stringliteral">&#39;output_params&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a9d60cf6c62887ce46406798c88d63c14">out_params</a></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        io_params_json = json.dumps(io_params_dict, indent=4)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        io_files_path_dict = {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="stringliteral">&#39;input_symlinks&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acb83906d8832fe0f0713e93542f21bd5">in_symlinks</a>,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="stringliteral">&#39;output_files&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">out_files</a>,</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="stringliteral">&#39;output_symlinks&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#aef6dd10c92ce27c22d1d1a9cff95d44e">out_symlinks</a>,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        io_files_path_json = json.dumps(io_files_path_dict, indent=4)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> io_params_json, io_files_path_json</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#ab4c7c22a8f3c0f4f4915207cec2d2758">   64</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#ab4c7c22a8f3c0f4f4915207cec2d2758">execute</a>(self):</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">        計算を行って，self.out_paramsに出力パラメータの値を，</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">        self.in_filesやself.out_filesには入出力のファイルパスを保存する</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">pass</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a903af30eb1ece52372bb9febce6873f1">   71</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a903af30eb1ece52372bb9febce6873f1">make_parser</a>(self):</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="comment"># parserの設定</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        parser_decsription = <span class="stringliteral">&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">        template</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        parser = argparse.ArgumentParser(</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            description=parser_decsription</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        )</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        verbose_help = <span class="stringliteral">&#39;logging level&#39;</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        parser.add_argument(</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <span class="stringliteral">&#39;-v&#39;</span>, <span class="stringliteral">&#39;--verbose&#39;</span>,</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            type=int,</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            default=INFO,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            help=verbose_help</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        )</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        logfile_help = <span class="stringliteral">&#39;log file name&#39;</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        parser.add_argument(</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="stringliteral">&#39;-l&#39;</span>, <span class="stringliteral">&#39;--logfile&#39;</span>,</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            type=str,</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            default=<span class="keywordtype">None</span>,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            help=logfile_help</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        )</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">return</span> parser</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">   97</a></span>&#160;<span class="keyword">def </span><a class="code" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">main</a>(obj):</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    error = <span class="keywordtype">None</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">try</span>:</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        obj.execute()</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">except</span> Exception:</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keyword">import</span> traceback</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">import</span> sys</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        obj.logger.error(traceback.format_exc())</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        exc_type = sys.exc_info()[0]</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        exc_type_str = exc_type.__name__</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        error = exc_type_str</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordflow">except</span> KeyboardInterrupt:</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        error = <span class="stringliteral">&#39;KeyboardInterrupted&#39;</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordflow">return</span> obj.make_output_json(), error</div>
-<div class="ttc" id="namespaceexp__wrapper_1_1template_html_adb9826f8a91fec38d523d070ffe65f3f"><div class="ttname"><a href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">exp_wrapper.template.main</a></div><div class="ttdeci">def main</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00097">template.py:97</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_af8b63860684ecb7b1f14bda0ff5ffd2f"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#af8b63860684ecb7b1f14bda0ff5ffd2f">exp_wrapper.template.Main.args</a></div><div class="ttdeci">args</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00015">template.py:15</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html">exp_wrapper.template.Main</a></div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00012">template.py:12</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a0b4c50f96c0f9440b8f8009f0ad7c9ef"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a0b4c50f96c0f9440b8f8009f0ad7c9ef">exp_wrapper.template.Main.in_params</a></div><div class="ttdeci">in_params</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00016">template.py:16</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a2cc703274da6dfa871ee6b1a657dc6e7"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2cc703274da6dfa871ee6b1a657dc6e7">exp_wrapper.template.Main.make_logger</a></div><div class="ttdeci">def make_logger</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00031">template.py:31</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a7fcbd7d12183940aac02ad4481a481fc"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">exp_wrapper.template.Main.out_files</a></div><div class="ttdeci">out_files</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00019">template.py:19</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_ab4c7c22a8f3c0f4f4915207cec2d2758"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#ab4c7c22a8f3c0f4f4915207cec2d2758">exp_wrapper.template.Main.execute</a></div><div class="ttdeci">def execute</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00064">template.py:64</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a72d309b21dbcdaf059ada73f5b944daa"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a72d309b21dbcdaf059ada73f5b944daa">exp_wrapper.template.Main.set_logger_format</a></div><div class="ttdeci">def set_logger_format</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00044">template.py:44</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a1ae2bd38572875df84c5096fdd3907b2"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a1ae2bd38572875df84c5096fdd3907b2">exp_wrapper.template.Main.make_output_json</a></div><div class="ttdeci">def make_output_json</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00048">template.py:48</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a903af30eb1ece52372bb9febce6873f1"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a903af30eb1ece52372bb9febce6873f1">exp_wrapper.template.Main.make_parser</a></div><div class="ttdeci">def make_parser</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00071">template.py:71</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_acd9b11b39ddfe12fb1015ef920f6e347"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acd9b11b39ddfe12fb1015ef920f6e347">exp_wrapper.template.Main.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00013">template.py:13</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a9d60cf6c62887ce46406798c88d63c14"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a9d60cf6c62887ce46406798c88d63c14">exp_wrapper.template.Main.out_params</a></div><div class="ttdeci">out_params</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00017">template.py:17</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a2e1c2ea9de0065e45135d454b01d88f9"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2e1c2ea9de0065e45135d454b01d88f9">exp_wrapper.template.Main.logger</a></div><div class="ttdeci">logger</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00032">template.py:32</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_aef6dd10c92ce27c22d1d1a9cff95d44e"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#aef6dd10c92ce27c22d1d1a9cff95d44e">exp_wrapper.template.Main.out_symlinks</a></div><div class="ttdeci">out_symlinks</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00020">template.py:20</a></div></div>
-<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_acb83906d8832fe0f0713e93542f21bd5"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acb83906d8832fe0f0713e93542f21bd5">exp_wrapper.template.Main.in_symlinks</a></div><div class="ttdeci">in_symlinks</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00018">template.py:18</a></div></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">## @package template</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">#  実験用スクリプトのテンプレートが定義されているパッケージ</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">import</span> json</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">import</span> argparse</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">from</span> logging <span class="keyword">import</span> getLogger</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">from</span> logging <span class="keyword">import</span> StreamHandler, FileHandler</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">from</span> logging <span class="keyword">import</span> INFO, DEBUG</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">from</span> logging <span class="keyword">import</span> Formatter</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">from</span> inspect <span class="keyword">import</span> currentframe</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">from</span> os.path <span class="keyword">import</span> splitext, split</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">## スクリプトのメインとなるテンプレートクラス</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">#  実験用スクリプトのメインとなるテンプレートクラス.@n</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">#  このMainクラスは継承して利用することを想定している.@n</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">#  継承先のクラスでは, excute()とmake_parser()をオーバーライドする.@n</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html">Main</a>(object):</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="comment">## コンストラクタ</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="comment">#  @param self オブジェクト自身に対するポインタ</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="comment">#  @param argv コマンドライン引数を保持するリスト</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acd9b11b39ddfe12fb1015ef920f6e347">   24</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acd9b11b39ddfe12fb1015ef920f6e347">__init__</a>(self, argv):</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        parser = self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a903af30eb1ece52372bb9febce6873f1">make_parser</a>()</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="comment">## @var args</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="comment">#  コマンドライン引数のリスト</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#af8b63860684ecb7b1f14bda0ff5ffd2f">   28</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#af8b63860684ecb7b1f14bda0ff5ffd2f">args</a> = parser.parse_args(argv)</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="comment">## @var in_params</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="comment">#  入力パラメータの辞書(コマンドライン引数で初期化している)</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a0b4c50f96c0f9440b8f8009f0ad7c9ef">   31</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a0b4c50f96c0f9440b8f8009f0ad7c9ef">in_params</a> = vars(self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#af8b63860684ecb7b1f14bda0ff5ffd2f">args</a>)</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="comment">## @var out_params</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="comment">#  出力パラメータの辞書</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a9d60cf6c62887ce46406798c88d63c14">   34</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a9d60cf6c62887ce46406798c88d63c14">out_params</a> = dict()</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="comment">## @var in_symlinks</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="comment">#  シンボリックリンクを張りたい入力ファイル名を記述する辞書</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acb83906d8832fe0f0713e93542f21bd5">   37</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acb83906d8832fe0f0713e93542f21bd5">in_symlinks</a> = dict()</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="comment">## @var out_files</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="comment">#  出力ファイル名を記述する辞書</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">   40</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">out_files</a> = dict()</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">## @var out_symlinks</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="comment">#  シンボリックリンクを張りたい出力ファイル名を記述する辞書</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#aef6dd10c92ce27c22d1d1a9cff95d44e">   43</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#aef6dd10c92ce27c22d1d1a9cff95d44e">out_symlinks</a> = dict()</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        pyfile_str = currentframe().f_back.f_code.co_filename</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        abspath_without_ext = splitext(pyfile_str)[0]</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        module_name = split(abspath_without_ext)[1]</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2cc703274da6dfa871ee6b1a657dc6e7">make_logger</a>(module_name, self.args.verbose, self.args.logfile)</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        formatter = Formatter(</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="stringliteral">&quot;[%(asctime) -15s]\n%(filename)s,&quot;</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="stringliteral">&quot;L%(lineno)s:%(levelname)s\t%(message)s&quot;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        )</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a72d309b21dbcdaf059ada73f5b944daa">set_logger_format</a>(formatter)</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">## ロガーを生成するメソッド</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">#</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">#  指定の名前のロガーを生成するメソッド.@n</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">#  ハンドラとして, 標準出力(StreamHandler)とファイル出力(FileHandler)を登録する.@n</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">#  ただし, ログファイル名を指定しなかった場合(logfile_name=Noneの場合)には</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">#  ファイル出力は行わない.@n</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="comment">#  また, ファイルへのログレベルはDEBUGに設定している.@n</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="comment">#  @param self オブジェクト自身に対するポインタ</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">#  @param name ロガーの名前</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">#  @param level 標準出力のハンドラに対するログレベル</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">#  @param logfile_name ログをファイル出力する場合のファイル名</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2cc703274da6dfa871ee6b1a657dc6e7">   65</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2cc703274da6dfa871ee6b1a657dc6e7">make_logger</a>(self, name, level, logfile_name=None):</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="comment">## @var logger</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="comment">#  メソッドexcute()内で利用するロガーオブジェクト</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2e1c2ea9de0065e45135d454b01d88f9">   68</a></span>&#160;        self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2e1c2ea9de0065e45135d454b01d88f9">logger</a> = getLogger(name)</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        self.logger.setLevel(DEBUG)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        sh = StreamHandler()</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        sh.setLevel(level)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        self.logger.addHandler(sh)</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">if</span> logfile_name <span class="keywordflow">is</span> <span class="keywordflow">not</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            fh = FileHandler(logfile_name, <span class="stringliteral">&#39;w&#39;</span>)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            fh.setLevel(DEBUG)</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            self.logger.addHandler(fh)</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">out_files</a>[<span class="stringliteral">&#39;log&#39;</span>] = logfile_name</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        self.logger.propagate = <span class="keyword">False</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="comment">## ロガーに対してフォーマッタを設定するメソッド</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">#  @param self オブジェクト自身に対するポインタ</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">#  @param formatter メンバ変数loggerに設定したいフォーマッタオブジェクト</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a72d309b21dbcdaf059ada73f5b944daa">   83</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a72d309b21dbcdaf059ada73f5b944daa">set_logger_format</a>(self, formatter):</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">for</span> handler <span class="keywordflow">in</span> self.logger.handlers:</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            handler.setFormatter(formatter)</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">## メンバ変数in_params, out_params, in_symlinks, out_symlinks, out_filesの</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="comment">#  内容に基づいて, jsonファイルを生成するメソッド</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="comment">#  @param self オブジェクト自身に対するポインタ</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="comment">#  @return io_params_json 入出力パラメータに関するjsonオブジェクト</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="comment">#  @return io_files_path_json 出力ファイルおよびシンボリックリンクに関するjsonオブジェクト</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a1ae2bd38572875df84c5096fdd3907b2">   92</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a1ae2bd38572875df84c5096fdd3907b2">make_output_json</a>(self):</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        io_params_dict = {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="stringliteral">&#39;input_params&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a0b4c50f96c0f9440b8f8009f0ad7c9ef">in_params</a>,</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="stringliteral">&#39;output_params&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a9d60cf6c62887ce46406798c88d63c14">out_params</a></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        io_params_json = json.dumps(io_params_dict, indent=4)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        io_files_path_dict = {</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="stringliteral">&#39;input_symlinks&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acb83906d8832fe0f0713e93542f21bd5">in_symlinks</a>,</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="stringliteral">&#39;output_files&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">out_files</a>,</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="stringliteral">&#39;output_symlinks&#39;</span>: self.<a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#aef6dd10c92ce27c22d1d1a9cff95d44e">out_symlinks</a>,</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        io_files_path_json = json.dumps(io_files_path_dict, indent=4)</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">return</span> io_params_json, io_files_path_json</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">## メインの処理を行うメソッド</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment">#</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="comment">#  利用時には継承先のクラスで本メソッドをオーバーライドして利用する.</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">#  @param self オブジェクト自身に対するポインタ</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#ab4c7c22a8f3c0f4f4915207cec2d2758">  112</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#ab4c7c22a8f3c0f4f4915207cec2d2758">execute</a>(self):</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="stringliteral">        計算を行って，self.out_paramsに出力パラメータの値を，</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="stringliteral">        self.in_filesやself.out_filesには入出力のファイルパスを保存する</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordflow">pass</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="comment">## コマンドライン引数のパーサを生成するメソッド</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="comment">#</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="comment">#  excute()と同様に, 継承先のクラスで本メソッドをオーバーライドして利用する.@n</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="comment">#  本メソッドでは, ログに関するコマンドラインオプションのみを定義している.</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="comment">#  @param self オブジェクト自身に対するポインタ</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="comment">#  @return parser パーサオブジェクト</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a903af30eb1ece52372bb9febce6873f1">  125</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a903af30eb1ece52372bb9febce6873f1">make_parser</a>(self):</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="comment"># parserの設定</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        parser_decsription = <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">        template</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        parser = argparse.ArgumentParser(</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            description=parser_decsription</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        )</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        verbose_help = <span class="stringliteral">&#39;logging level&#39;</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        parser.add_argument(</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="stringliteral">&#39;-v&#39;</span>, <span class="stringliteral">&#39;--verbose&#39;</span>,</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            type=int,</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            default=INFO,</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            help=verbose_help</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        )</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        logfile_help = <span class="stringliteral">&#39;log file name&#39;</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        parser.add_argument(</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="stringliteral">&#39;-l&#39;</span>, <span class="stringliteral">&#39;--logfile&#39;</span>,</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;            type=str,</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;            default=<span class="keywordtype">None</span>,</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            help=logfile_help</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        )</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">return</span> parser</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">## main関数</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">#  この関数にtemplate.Mainを継承したオブジェクトを引数として渡し,</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="comment">#  excute()メソッドを実行する. @n</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="comment">#  excute()内で例外が発生した場合にはロガーにtracebackの内容を出力する.@n</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="comment">#  @param obj template.Mainを継承したオブジェクト</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="comment">#  @return パラメータおよびファイルに関するjsonファイルオブジェクトおよびerrorに関する文字列</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno"><a class="line" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">  158</a></span>&#160;<span class="keyword">def </span><a class="code" href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">main</a>(obj):</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    error = <span class="keywordtype">None</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        obj.execute()</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordflow">except</span> Exception:</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keyword">import</span> traceback</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keyword">import</span> sys</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        obj.logger.error(traceback.format_exc())</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        exc_type = sys.exc_info()[0]</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        exc_type_str = exc_type.__name__</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        error = exc_type_str</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordflow">except</span> KeyboardInterrupt:</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        error = <span class="stringliteral">&#39;KeyboardInterrupted&#39;</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="keywordflow">return</span> obj.make_output_json(), error</div>
+<div class="ttc" id="namespaceexp__wrapper_1_1template_html_adb9826f8a91fec38d523d070ffe65f3f"><div class="ttname"><a href="../../d8/d0e/namespaceexp__wrapper_1_1template.html#adb9826f8a91fec38d523d070ffe65f3f">exp_wrapper.template.main</a></div><div class="ttdeci">def main</div><div class="ttdoc">main関数 </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00158">template.py:158</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_af8b63860684ecb7b1f14bda0ff5ffd2f"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#af8b63860684ecb7b1f14bda0ff5ffd2f">exp_wrapper.template.Main.args</a></div><div class="ttdeci">args</div><div class="ttdoc">コマンドライン引数のリスト </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00028">template.py:28</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html">exp_wrapper.template.Main</a></div><div class="ttdoc">スクリプトのメインとなるテンプレートクラス </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00020">template.py:20</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a0b4c50f96c0f9440b8f8009f0ad7c9ef"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a0b4c50f96c0f9440b8f8009f0ad7c9ef">exp_wrapper.template.Main.in_params</a></div><div class="ttdeci">in_params</div><div class="ttdoc">入力パラメータの辞書(コマンドライン引数で初期化している) </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00031">template.py:31</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a2cc703274da6dfa871ee6b1a657dc6e7"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2cc703274da6dfa871ee6b1a657dc6e7">exp_wrapper.template.Main.make_logger</a></div><div class="ttdeci">def make_logger</div><div class="ttdoc">ロガーを生成するメソッド </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00065">template.py:65</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a7fcbd7d12183940aac02ad4481a481fc"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a7fcbd7d12183940aac02ad4481a481fc">exp_wrapper.template.Main.out_files</a></div><div class="ttdeci">out_files</div><div class="ttdoc">出力ファイル名を記述する辞書 </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00040">template.py:40</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_ab4c7c22a8f3c0f4f4915207cec2d2758"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#ab4c7c22a8f3c0f4f4915207cec2d2758">exp_wrapper.template.Main.execute</a></div><div class="ttdeci">def execute</div><div class="ttdoc">メインの処理を行うメソッド </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00112">template.py:112</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a72d309b21dbcdaf059ada73f5b944daa"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a72d309b21dbcdaf059ada73f5b944daa">exp_wrapper.template.Main.set_logger_format</a></div><div class="ttdeci">def set_logger_format</div><div class="ttdoc">ロガーに対してフォーマッタを設定するメソッド </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00083">template.py:83</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a1ae2bd38572875df84c5096fdd3907b2"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a1ae2bd38572875df84c5096fdd3907b2">exp_wrapper.template.Main.make_output_json</a></div><div class="ttdeci">def make_output_json</div><div class="ttdoc">メンバ変数in_params, out_params, in_symlinks, out_symlinks, out_filesの 内容に基づいて, jsonファイルを生成するメソッド ...</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00092">template.py:92</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a903af30eb1ece52372bb9febce6873f1"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a903af30eb1ece52372bb9febce6873f1">exp_wrapper.template.Main.make_parser</a></div><div class="ttdeci">def make_parser</div><div class="ttdoc">コマンドライン引数のパーサを生成するメソッド </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00125">template.py:125</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_acd9b11b39ddfe12fb1015ef920f6e347"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acd9b11b39ddfe12fb1015ef920f6e347">exp_wrapper.template.Main.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdoc">コンストラクタ </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00024">template.py:24</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a9d60cf6c62887ce46406798c88d63c14"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a9d60cf6c62887ce46406798c88d63c14">exp_wrapper.template.Main.out_params</a></div><div class="ttdeci">out_params</div><div class="ttdoc">出力パラメータの辞書 </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00034">template.py:34</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_a2e1c2ea9de0065e45135d454b01d88f9"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#a2e1c2ea9de0065e45135d454b01d88f9">exp_wrapper.template.Main.logger</a></div><div class="ttdeci">logger</div><div class="ttdoc">メソッドexcute()内で利用するロガーオブジェクト </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00068">template.py:68</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_aef6dd10c92ce27c22d1d1a9cff95d44e"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#aef6dd10c92ce27c22d1d1a9cff95d44e">exp_wrapper.template.Main.out_symlinks</a></div><div class="ttdeci">out_symlinks</div><div class="ttdoc">シンボリックリンクを張りたい出力ファイル名を記述する辞書 </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00043">template.py:43</a></div></div>
+<div class="ttc" id="classexp__wrapper_1_1template_1_1Main_html_acb83906d8832fe0f0713e93542f21bd5"><div class="ttname"><a href="../../dc/d27/classexp__wrapper_1_1template_1_1Main.html#acb83906d8832fe0f0713e93542f21bd5">exp_wrapper.template.Main.in_symlinks</a></div><div class="ttdeci">in_symlinks</div><div class="ttdoc">シンボリックリンクを張りたい入力ファイル名を記述する辞書 </div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d98/template_8py_source.html#l00037">template.py:37</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2016年02月27日(土) 00時43分39秒作成 - Heavy Ion Radio Therapy Project / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2016年02月27日(土) 00時54分16秒作成 - Heavy Ion Radio Therapy Project / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

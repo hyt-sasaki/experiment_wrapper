@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['setup',['setup',['../dd/dc4/namespacesetup.html',1,'']]]
+  ['gitlog',['gitlog',['../d4/d05/namespacegitlog.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['repo',['repo',['../d2/dd7/classexp__wrapper_1_1gitlog_1_1gitlog.html#ad8762d4897cc4959d416dcdcd6218376',1,'exp_wrapper::gitlog::gitlog']]]
+  ['scripts',['scripts',['../dd/dc4/namespacesetup.html#ac1f45f8d37050b278bf63c812b1130dd',1,'setup']]]
 ];
