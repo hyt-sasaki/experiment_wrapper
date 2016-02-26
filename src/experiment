@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+## @package experiment
+#
+#  実験用ラッパースクリプト
 import argparse
 import os
 import sys
@@ -16,6 +19,13 @@ from logging import Formatter
 import errno
 
 
+## コマンドライン引数のパーサを生成する関数
+#
+#  コマンドライン引数のパーサを生成する.@n
+#  実際に動かしたいスクリプトのコマンドラインオプションと区別するために,
+#  オプションのprefixは'-'ではなく'+'になっている.
+#  実際に動かしたいスクリプトのパスが位置引数となっており, それ以外はオプション引数である.
+#  @return parser パーサオブジェクト
 def make_parser():
     # parserの設定
     parser_description = """
@@ -93,6 +103,12 @@ def make_parser():
     return parser
 
 
+## 指定したクラスを動的にimportする関数
+#
+#  @param pyfile_str 対象とするpythonスクリプトのパス文字列
+#  @param class_str template.Mainを継承したクラス名の文字列
+#  @param logger ロガーオブジェクト
+#  @return クラス名とクラスを保持するリスト
 def dynamic_import(pyfile_str, class_str, logger=getLogger()):
     abspath = os.path.abspath(pyfile_str)
     abspath_without_ext = os.path.splitext(abspath)[0]
@@ -113,6 +129,15 @@ def dynamic_import(pyfile_str, class_str, logger=getLogger()):
     return [class_name, class_]
 
 
+## 実験結果等を保存するためのディレクトリを作成する関数
+#
+#  @param root_str 作成したいディレクトリのルートパス
+#  @param module_name クラス名/モジュール名の文字列であり,
+#  同名のディレクトリがroot_strで指定されたディレクトリ以下に作成される
+#  @param date_str 日付を表す文字列であり, module_nameで指定されたディレクトリ以下に
+#  日付を名前としたディレクトリが作成される
+#  @param logger ロガーオブジェクト
+#  @return 作成したディレクトリのパス文字列
 def make_outputdir(root_str, module_name, date_str, logger=getLogger()):
     tdatetime = datetime.datetime.now()
     date_str = tdatetime.strftime('%Y%m%d_%H%M_%S')
@@ -128,6 +153,10 @@ def make_outputdir(root_str, module_name, date_str, logger=getLogger()):
     return output_dir
 
 
+## コマンドライン引数をテキストファイルに保存する関数
+#  @param allargs_ コマンドライン引数のリスト
+#  @param output_dir ファイルを保存するパス文字列
+#  @param logger ロガーオブジェクト
 def save_args(allargs_, output_dir, logger=getLogger()):
     allargs = []
     for arg in allargs_:
@@ -148,6 +177,11 @@ def save_args(allargs_, output_dir, logger=getLogger()):
     logger.info('%s has been created' % argfile_path)
 
 
+## コマンドラインで指定したコメント文字列をテキストファイルに保存する関数
+#  @param comment コメント文字列
+#  @param output_dir ファイルを保存するパス文字列
+#  @prama date_str 日付を表す文字列であり, ファイル名に付加される
+#  @param logger ロガーオブジェクト
 def save_comment(comment, output_dir, date_str, logger=getLogger()):
     if comment is not None:
         comment_file_path = os.path.join(
@@ -158,6 +192,12 @@ def save_comment(comment, output_dir, date_str, logger=getLogger()):
         logger.info('%s has been created' % comment_file_path)
 
 
+## 入出力ファイルのパスおよび入出力パラメータをjsonファイルに書き込む関数
+#  @param io_params 入出力パラメータが記述されたjsonオブジェクト
+#  @param io_files 入出力ファイルパスが記述されたjsonオブジェクト
+#  @param date_str 日付を表す文字列であり, ファイル名に付加される
+#  @param logger ロガーオブジェクト
+#  @return 入出力ファイルパスの辞書
 def save_io_to_json(
     io_params, io_files, output_dir, date_str, logger=getLogger()
 ):
@@ -177,6 +217,12 @@ def save_io_to_json(
     return io_files_dict
 
 
+## リストに保存されたパスに関するシンボリックリンクを作成する関数
+#  @param symlink_list シンボリックリンクを張りたいファイルのパス文字列が保存されたリスト
+#  @param output_dir 実験結果の出力ディレクトリ(日付ディレクトリ)のパス文字列
+#  @param dir_name output_dirで指定されたディレクトリ以下に作成される,
+#  シンボリックリンクが張られるディレクトリの名前文字列
+#  @param logger ロガーオブジェクト
 def make_symboliclink(symlink_list, output_dir, dir_name, logger=getLogger()):
     input_files_link_dir = os.path.join(output_dir, dir_name)
     try:
@@ -196,6 +242,11 @@ def make_symboliclink(symlink_list, output_dir, dir_name, logger=getLogger()):
             )
 
 
+## 入出力ファイルのパスが記述された辞書に基づいて, 実験用スクリプトで生成された
+#  出力ファイルを指定したディレクトリに移動する関数
+#  @param output_files 入出力ファイルのパスが記述された辞書
+#  @param output_dir 移動先のディレクトリパス文字列
+#  @param logger ロガーオブジェクト
 def move_output(output_files, output_dir, logger=getLogger()):
     output_files_dir = os.path.join(output_dir, 'output_files')
     try:
@@ -214,6 +265,9 @@ def move_output(output_files, output_dir, logger=getLogger()):
                 logger.info('%s has been moved' % ofile)
 
 
+## ログファイルを指定ディレクトリに移動する関数
+#  @param logfile ログのファイルオブジェクト
+#  @param output_dir 移動先ディレクトリのパス文字列
 def move_logfile(logfile, output_dir):
     if logfile is not None:
         output_files_dir = os.path.join(output_dir, 'output_files')
@@ -227,6 +281,10 @@ def move_logfile(logfile, output_dir):
             shutil.move(logfile, output_files_dir)
 
 
+## ロガーを作成する関数
+#  @param logfile ログファイルのファイル名文字列
+#  @param verbose 標準出力ハンドラに対するログレベル
+#  @return ロガーオブジェクト
 def make_logger(logfile, verbose):
     logger = getLogger(__name__)
     format_str = \
@@ -249,6 +307,7 @@ def make_logger(logfile, verbose):
     return logger
 
 
+## メイン関数
 def main():
     # パーサーの生成
     parser = make_parser()

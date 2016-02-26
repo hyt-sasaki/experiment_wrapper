@@ -1,17 +1,28 @@
 # -*- coding:utf-8 -*-
+## @package gitlog
+#
+#  Gitに関するパッケージ
 import datetime
 import codecs
 import os
 import git
 
 
+## Gitのコミットログを扱うためのクラス
 class gitlog(object):
+    ## コンストラクタ
+    #  @param self オブジェクト自身に対するポインタ
+    #  @param repo リポジトリのオブジェクト
+    #  @param branch コミットログの記録対象となるブランチオブジェクト
     def __init__(self, repo, branch=None):
+        ## @var repo
+        #  リポジトリオブジェクト
         self.repo = repo
-        self.file = file
         if branch is None:
             branch = self.repo.active_branch.name
         try:
+            ## @var latest_commit
+            #  対象となるブランチにおける最新コミットのオブジェクト
             self.latest_commit =\
                 repo.iter_commits(branch, max_count=100).next()
         except Exception as e:
@@ -19,6 +30,12 @@ class gitlog(object):
             self.latest_commit = None
             raise e
 
+    ## コミットログをファイル出力するメソッド
+    #
+    #  メンバ変数
+    #  @param self オブジェクト自身に対するポインタ
+    #  @param f コミットログの出力先のファイルオブジェクト
+    #  @param verbose 処理内容の詳細表示を行うかどうかのbool変数
     def write_commit(self, f, verbose=False):
         if self.latest_commit is None:
             if verbose:
@@ -47,6 +64,14 @@ class gitlog(object):
             print '============'
 
 
+## 指定ディレクトリより下の階層に存在するリポジトリを示すオブジェクトを生成する関数
+#
+#  引数script_pathで指定されたディレクトリから引数depthの深さまでリポジトリの探索を行う.@n
+#  探索範囲内にGitリポジトリが存在する場合には対応するリポジトリオブジェクトを返すが,
+#  存在しない場合にはNoneを返す.
+#  @param script_path 探索を行いたいディレクトリの文字列
+#  @param depth 探索を行う深さ
+#  @return リポジトリを示すオブジェクト(存在しなかった場合はNone)
 def make_repo(script_path, depth=5):
     dir = os.path.dirname(script_path)
     path = os.path.abspath(dir)
@@ -81,6 +106,13 @@ def make_repo(script_path, depth=5):
     return repo
 
 
+## 指定したディレクトリ以下に存在するリポジトリの指定ブランチに関して
+#  最新コミットのログをファイル出力する関数
+#
+#  @param script_path コミットログを残したいスクリプトのパス文字列
+#  @param filepath コミットログファイルの出力先パスの文字列
+#  @param branch ログをとる対象となるブランチオブジェクト
+#  @param verbose 処理内容の詳細表示を行うかどうかのbool変数
 def write_commitlog(
     script_path, filepath=None, branch=None, verbose=False
 ):
