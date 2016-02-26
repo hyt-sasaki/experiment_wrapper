@@ -1,14 +1,26 @@
 # -*- coding:utf-8 -*-
+## @package example
+#
+#  実験用スクリプトの具体例が記述されているパッケージ
 from exp_wrapper import template
 from argparse import ArgumentDefaultsHelpFormatter
 
 
+## 実験用スクリプトのメインとなるクラス
+#
+#  実験用スクリプトのメインとなるクラスで, template.Mainを継承する.
 class Example(template.Main):        # templateを継承
+    ## コンストラクタ
+    #  @param self オブジェクト自身に対するポインタ
+    #  @param argv コマンドライン引数を保持するリスト
     def __init__(self, argv):
         # 親クラスtemplate.Mainのコンストラクタを実行
         super(Example, self).__init__(argv)
 
-    # 基本的な処理内容はexcute(self)に記述する
+    ## メイン処理を行うメソッド
+    #
+    # 実験用スクリプトのメイン処理を行うメソッド.
+    # 基本的な処理内容は本メソッドに記述する.
     def execute(self):
         # コマンドライン引数の情報を取得
         x = self.args.x
@@ -37,7 +49,12 @@ class Example(template.Main):        # templateを継承
             # 作成されたディレクトリに移動される
             self.out_files['result'] = self.args.output
 
-    # 必要に応じて, コマンドライン引数を設定
+    ## コマンドライン引数のパーサを生成するメソッド
+    #
+    #  コマンドライン引数のパーサを生成するメソッドで,
+    #  必要に応じたコマンドライン引数を設定する.
+    #  @param self オブジェクト自身に対するポインタ
+    #  @return parser パーサオブジェクト
     def make_parser(self):
         parser = super(Example, self).make_parser()
         # parserの設定
@@ -73,6 +90,9 @@ class Example(template.Main):        # templateを継承
         return parser
 
 
+## 割り算を行う関数
+#  @param devidend 被除数
+#  @param devisor 除数
 def devide(devidend, devisor):
     return devidend / devisor
 

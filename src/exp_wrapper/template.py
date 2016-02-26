@@ -1,4 +1,7 @@
 # -*- coding:utf-8 -*-
+## @package template
+#
+#  実験用スクリプトのテンプレートが定義されているパッケージ
 import json
 import argparse
 from logging import getLogger
@@ -9,14 +12,34 @@ from inspect import currentframe
 from os.path import splitext, split
 
 
+## スクリプトのメインとなるテンプレートクラス
+#
+#  実験用スクリプトのメインとなるテンプレートクラス.@n
+#  このMainクラスは継承して利用することを想定している.@n
+#  継承先のクラスでは, excute()とmake_parser()をオーバーライドする.@n
 class Main(object):
+    ## コンストラクタ
+    #  @param self オブジェクト自身に対するポインタ
+    #  @param argv コマンドライン引数を保持するリスト
     def __init__(self, argv):
         parser = self.make_parser()
+        ## @var args
+        #  コマンドライン引数のリスト
         self.args = parser.parse_args(argv)
+        ## @var in_params
+        #  入力パラメータの辞書(コマンドライン引数で初期化している)
         self.in_params = vars(self.args)
+        ## @var out_params
+        #  出力パラメータの辞書
         self.out_params = dict()
+        ## @var in_symlinks
+        #  シンボリックリンクを張りたい入力ファイル名を記述する辞書
         self.in_symlinks = dict()
+        ## @var out_files
+        #  出力ファイル名を記述する辞書
         self.out_files = dict()
+        ## @var out_symlinks
+        #  シンボリックリンクを張りたい出力ファイル名を記述する辞書
         self.out_symlinks = dict()
         pyfile_str = currentframe().f_back.f_code.co_filename
         abspath_without_ext = splitext(pyfile_str)[0]
@@ -28,7 +51,20 @@ class Main(object):
         )
         self.set_logger_format(formatter)
 
+    ## ロガーを生成するメソッド
+    #
+    #  指定の名前のロガーを生成するメソッド.@n
+    #  ハンドラとして, 標準出力(StreamHandler)とファイル出力(FileHandler)を登録する.@n
+    #  ただし, ログファイル名を指定しなかった場合(logfile_name=Noneの場合)には
+    #  ファイル出力は行わない.@n
+    #  また, ファイルへのログレベルはDEBUGに設定している.@n
+    #  @param self オブジェクト自身に対するポインタ
+    #  @param name ロガーの名前
+    #  @param level 標準出力のハンドラに対するログレベル
+    #  @param logfile_name ログをファイル出力する場合のファイル名
     def make_logger(self, name, level, logfile_name=None):
+        ## @var logger
+        #  メソッドexcute()内で利用するロガーオブジェクト
         self.logger = getLogger(name)
         self.logger.setLevel(DEBUG)
         sh = StreamHandler()
@@ -41,10 +77,18 @@ class Main(object):
             self.out_files['log'] = logfile_name
         self.logger.propagate = False
 
+    ## ロガーに対してフォーマッタを設定するメソッド
+    #  @param self オブジェクト自身に対するポインタ
+    #  @param formatter メンバ変数loggerに設定したいフォーマッタオブジェクト
     def set_logger_format(self, formatter):
         for handler in self.logger.handlers:
             handler.setFormatter(formatter)
 
+    ## メンバ変数in_params, out_params, in_symlinks, out_symlinks, out_filesの
+    #  内容に基づいて, jsonファイルを生成するメソッド
+    #  @param self オブジェクト自身に対するポインタ
+    #  @return io_params_json 入出力パラメータに関するjsonオブジェクト
+    #  @return io_files_path_json 出力ファイルおよびシンボリックリンクに関するjsonオブジェクト
     def make_output_json(self):
         io_params_dict = {
             'input_params': self.in_params,
@@ -61,6 +105,10 @@ class Main(object):
 
         return io_params_json, io_files_path_json
 
+    ## メインの処理を行うメソッド
+    #
+    #  利用時には継承先のクラスで本メソッドをオーバーライドして利用する.
+    #  @param self オブジェクト自身に対するポインタ
     def execute(self):
         """
         計算を行って，self.out_paramsに出力パラメータの値を，
@@ -68,6 +116,12 @@ class Main(object):
         """
         pass
 
+    ## コマンドライン引数のパーサを生成するメソッド
+    #
+    #  excute()と同様に, 継承先のクラスで本メソッドをオーバーライドして利用する.@n
+    #  本メソッドでは, ログに関するコマンドラインオプションのみを定義している.
+    #  @param self オブジェクト自身に対するポインタ
+    #  @return parser パーサオブジェクト
     def make_parser(self):
         # parserの設定
         parser_decsription = """
@@ -94,6 +148,13 @@ class Main(object):
         return parser
 
 
+## main関数
+#
+#  この関数にtemplate.Mainを継承したオブジェクトを引数として渡し,
+#  excute()メソッドを実行する. @n
+#  excute()内で例外が発生した場合にはロガーにtracebackの内容を出力する.@n
+#  @param obj template.Mainを継承したオブジェクト
+#  @return パラメータおよびファイルに関するjsonファイルオブジェクトおよびerrorに関する文字列
 def main(obj):
     error = None
 
