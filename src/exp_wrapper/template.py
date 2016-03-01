@@ -46,18 +46,47 @@ class Main(object):
             handler.setFormatter(formatter)
 
     def make_output_json(self):
+        def json_callback_deco(func):
+            import functools
+
+            @functools.wraps(func)
+            def wrapper(o):
+                if isinstance(o, file):
+                    return o.name
+                return func(o)
+            return wrapper
+
+        @json_callback_deco
+        def skipvalues(o):
+            return 'unserializable object'
+
+        @json_callback_deco
+        def unskipvalues(o):
+            raise TypeError(repr(o) + ' is not JSON serializable')
+
+        if self.args.unskipvalues:
+            json_dump_callback = unskipvalues
+        else:
+            json_dump_callback = skipvalues
+
         io_params_dict = {
             'input_params': self.in_params,
             'output_params': self.out_params
         }
-        io_params_json = json.dumps(io_params_dict, indent=4)
+        io_params_json = json.dumps(
+            io_params_dict, indent=4,
+            default=json_dump_callback
+        )
 
         io_files_path_dict = {
             'input_symlinks': self.in_symlinks,
             'output_files': self.out_files,
             'output_symlinks': self.out_symlinks,
         }
-        io_files_path_json = json.dumps(io_files_path_dict, indent=4)
+        io_files_path_json = json.dumps(
+            io_files_path_dict, indent=4,
+            default=json_dump_callback
+        )
 
         return io_params_json, io_files_path_json
 
@@ -89,6 +118,15 @@ class Main(object):
             type=str,
             default=None,
             help=logfile_help
+        )
+        unskip_help = \
+            'If unskipvalues is set, '\
+            'dict values which is not JSON serializable will be skipped '\
+            'instead of raise TypeError'
+        parser.add_argument(
+            '--unskipvalues',
+            action='store_true',
+            help=unskip_help
         )
 
         return parser
