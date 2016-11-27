@@ -147,10 +147,11 @@ def dynamic_import(pyfile_str, class_str, logger=getLogger()):
 #  @return 作成したディレクトリのパス文字列
 def make_outputdir(root_str, module_name, dir_str, logger=getLogger()):
     output_dir = os.path.join(root_str, module_name, dir_str)
-    index = 0
-    while os.path.exists(output_dir):
-        index += 1
-        output_dir += '_%d' % index
+    if os.path.exists(output_dir):
+        index = 1
+        while os.path.exists(output_dir + '_' + str(index)):
+            index += 1
+        output_dir += '_' + str(index)
     try:
         os.makedirs(output_dir)
         logger.info('%s has been created' % output_dir)
