@@ -99,6 +99,13 @@ def make_parser():
         default=None,
         help=logfile_help
     )
+    dir_help = 'directory name'
+    parser.add_argument(
+        '+d', '++dir',
+        type=str,
+        default=None,
+        help=dir_help
+    )
 
     return parser
 
@@ -138,18 +145,17 @@ def dynamic_import(pyfile_str, class_str, logger=getLogger()):
 #  日付を名前としたディレクトリが作成される
 #  @param logger ロガーオブジェクト
 #  @return 作成したディレクトリのパス文字列
-def make_outputdir(root_str, module_name, date_str, logger=getLogger()):
-    tdatetime = datetime.datetime.now()
-    date_str = tdatetime.strftime('%Y%m%d_%H%M_%S')
-    output_dir = os.path.join(root_str, module_name, date_str)
+def make_outputdir(root_str, module_name, dir_str, logger=getLogger()):
+    output_dir = os.path.join(root_str, module_name, dir_str)
+    index = 0
+    while os.path.exists(output_dir):
+        index += 1
+        output_dir += '_%d' % index
     try:
         os.makedirs(output_dir)
         logger.info('%s has been created' % output_dir)
     except OSError as e:
         logger.exception(e)
-        if e.errno != errno.EEXIST:
-            raise
-        pass
     return output_dir
 
 
@@ -325,9 +331,13 @@ def main():
     # スクリプト実行日時の文字列を取得
     tdatetime = datetime.datetime.now()
     date_str = tdatetime.strftime('%Y%m%d_%H%M_%S')
+    if args.dir:
+        dir_str = args.dir
+    else:
+        dir_str = date_str
 
     # 実験ファイルの出力ディレクトリを作成
-    output_dir = make_outputdir(args.root, module_name, date_str, logger)
+    output_dir = make_outputdir(args.root, module_name, dir_str, logger)
 
     # コマンドラインオプションのパース情報をファイルに保存
     save_args(sys.argv[1:], output_dir, logger)
