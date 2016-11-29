@@ -366,6 +366,7 @@ def main():
 
     if error_str:
         new_output_dir = output_dir + '_' + error_str
+        new_output_dir = check_dir_name(new_output_dir)
         shutil.move(output_dir, new_output_dir)
         output_dir = new_output_dir
         if error_str is not 'KeyboardInterrupted':
