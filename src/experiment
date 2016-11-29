@@ -147,11 +147,7 @@ def dynamic_import(pyfile_str, class_str, logger=getLogger()):
 #  @return 作成したディレクトリのパス文字列
 def make_outputdir(root_str, module_name, dir_str, logger=getLogger()):
     output_dir = os.path.join(root_str, module_name, dir_str)
-    if os.path.exists(output_dir):
-        index = 1
-        while os.path.exists(output_dir + '_' + str(index)):
-            index += 1
-        output_dir += '_' + str(index)
+    output_dir = check_dir_name(output_dir)
     try:
         os.makedirs(output_dir)
         logger.info('%s has been created' % output_dir)
@@ -313,6 +309,21 @@ def make_logger(logfile, verbose):
         fh.setFormatter(format)
         logger.addHandler(fh)
     return logger
+
+
+## ディレクトリ名がすでに存在していないかをチェックする関数
+#  @param dir_name ディレクトリ名
+#  @return 重複を回避したディレクトリ名
+#
+#  引数で与えたディレクトリ名がすでに存在している場合に
+#  ディレクトリ名の末尾に数字を付加して返す
+def check_dir_name(dir_name):
+    if os.path.exists(dir_name):
+        index = 1
+        while os.path.exists(dir_name + '_' + str(index)):
+            index += 1
+        dir_name += '_' + str(index)
+    return dir_name
 
 
 ## メイン関数
