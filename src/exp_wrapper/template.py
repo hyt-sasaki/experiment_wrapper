@@ -21,8 +21,9 @@ class Main(object):
     ## コンストラクタ
     #  @param self オブジェクト自身に対するポインタ
     #  @param argv コマンドライン引数を保持するリスト
-    def __init__(self, argv):
+    def __init__(self, argv, parents=[]):
         parser = self.make_parser()
+        parents.append(parser)
         ## @var args
         #  コマンドライン引数のリスト
         self.args = parser.parse_args(argv)
