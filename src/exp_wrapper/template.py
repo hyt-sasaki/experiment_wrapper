@@ -24,6 +24,8 @@ class Main(object):
     def __init__(self, argv, parents=[]):
         parser = self.make_parser()
         parents.append(parser)
+        aggregated_parser = self.make_aggregated_parser(parents)
+        aggregated_parser.parse_args(argv)
         ## @var args
         #  コマンドライン引数のリスト
         self.args = parser.parse_args(argv)
@@ -145,6 +147,24 @@ class Main(object):
         self.in_filesやself.out_filesには入出力のファイルパスを保存する
         """
         pass
+
+    def make_aggregated_parser(self, parents):
+        main_parser = parents[-1]
+        prog = main_parser.prog
+        description = main_parser.description
+        epilog = main_parser.epilog
+        version = main_parser.version
+        aggregated_parser = argparse.ArgumentParser(
+            prog=prog,
+            description=description,
+            epilog=epilog,
+            version=version,
+            parents=parents,
+            add_help=True
+        )
+        aggregated_parser.formatter_class = \
+            argparse.ArgumentDefaultsHelpFormatter
+        return aggregated_parser
 
     ## コマンドライン引数のパーサを生成するメソッド
     #
