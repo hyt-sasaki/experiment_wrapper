@@ -3,6 +3,7 @@
 #
 #  実験用スクリプトの具体例が記述されているパッケージ
 from exp_wrapper import template
+from argparse import ArgumentParser
 from argparse import ArgumentDefaultsHelpFormatter
 
 
@@ -15,7 +16,11 @@ class Example(template.Main):        # templateを継承
     #  @param argv コマンドライン引数を保持するリスト
     def __init__(self, argv):
         # 親クラスtemplate.Mainのコンストラクタを実行
-        super(Example, self).__init__(argv)
+        parents_dict = {
+            'calc': self.make_calc_parser(),
+            'io': self.make_io_parser()
+        }
+        super(Example, self).__init__(argv, parents_dict)
 
     ## メイン処理を行うメソッド
     #
@@ -23,9 +28,9 @@ class Example(template.Main):        # templateを継承
     # 基本的な処理内容は本メソッドに記述する.
     def execute(self):
         # コマンドライン引数の情報を取得
-        x = self.args.x
+        x = self.args.calc.x
         self.logger.debug('x = %.2f' % x)
-        y = self.args.y
+        y = self.args.calc.y
         self.logger.debug('y = %.2f' % y)
 
         # jsonファイルに書き込む情報としてx, yの値を登録
@@ -40,14 +45,14 @@ class Example(template.Main):        # templateを継承
         self.out_params['devidend/divisor'] = ans
 
         # 計算結果をファイルに出力
-        if self.args.output is not None:
-            with open(self.args.output, 'w') as f:
+        if self.args.io.output is not None:
+            with open(self.args.io.output, 'w') as f:
                 f.write('divide operation\n')
                 f.write('%.2f / %.2f = %.2f' % (x, y, ans))
             # 出力ファイルをself.out_filesに格納
             # これによって, 出力ファイルが, experiment.pyで
             # 作成されたディレクトリに移動される
-            self.out_files['result'] = self.args.output
+            self.out_files['result'] = self.args.io.output
 
     ## コマンドライン引数のパーサを生成するメソッド
     #
@@ -65,22 +70,40 @@ class Example(template.Main):        # templateを継承
         parser.description = parser_decsription
         parser.prog = 'example'
         parser.formatter_class = ArgumentDefaultsHelpFormatter
+
+        return parser
+
+    def make_calc_parser(self):
+        parser = ArgumentParser(
+            formatter_class=ArgumentDefaultsHelpFormatter,
+            add_help=False
+        )
+        g = parser.add_argument_group('calc arguments')
         x_help = 'the first argument of divide operation'
-        parser.add_argument(
+        g.add_argument(
             'x',
             type=float,
             metavar='DIVIDEND',
             help=x_help
         )
         y_help = 'the second argument of divide operation'
-        parser.add_argument(
+        g.add_argument(
             'y',
             type=float,
             metavar='DIVISOR',
             help=y_help
         )
+
+        return parser
+
+    def make_io_parser(self):
+        parser = ArgumentParser(
+            formatter_class=ArgumentDefaultsHelpFormatter,
+            add_help=False
+        )
+        g = parser.add_argument_group('I/O settings')
         output_help = 'output filename'
-        parser.add_argument(
+        g.add_argument(
             '-o', '--output',
             type=str,
             default=None,
