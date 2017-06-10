@@ -75,8 +75,7 @@ class Example(template.Main):        # templateを継承
 
     def make_calc_parser(self):
         parser = ArgumentParser(
-            formatter_class=ArgumentDefaultsHelpFormatter,
-            add_help=False
+            formatter_class=ArgumentDefaultsHelpFormatter
         )
         g = parser.add_argument_group('calc arguments')
         x_help = 'the first argument of divide operation'
@@ -98,8 +97,7 @@ class Example(template.Main):        # templateを継承
 
     def make_io_parser(self):
         parser = ArgumentParser(
-            formatter_class=ArgumentDefaultsHelpFormatter,
-            add_help=False
+            formatter_class=ArgumentDefaultsHelpFormatter
         )
         g = parser.add_argument_group('I/O settings')
         output_help = 'output filename'
