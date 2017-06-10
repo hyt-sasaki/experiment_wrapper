@@ -1,2 +1,0 @@
-divide operation
-10.00 / 2.00 = 5.00
