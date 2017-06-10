@@ -25,11 +25,6 @@ class Main(object):
         ## @var args
         #  コマンドライン引数のリスト
         self.args = None
-        parser = self.make_parser()
-        parents_dict['main'] = parser
-        parents = parents_dict.values()
-        aggregated_parser = self.make_aggregated_parser(parents)
-        aggregated_parser.parse_args(argv)
         self.parse_args(argv, parents_dict)
         ## @var in_params
         #  入力パラメータの辞書(コマンドライン引数で初期化している)
@@ -211,6 +206,11 @@ class Main(object):
         return parser
 
     def parse_args(self, argv, parser_dict):
+        parser = self.make_parser()
+        parser_dict['main'] = parser
+        parents = parser_dict.values()
+        aggregated_parser = self.make_aggregated_parser(parents)
+        aggregated_parser.parse_args(argv)
         remain_args = argv
         self.args, remain_args = \
             parser_dict['main'].parse_known_args(remain_args)
