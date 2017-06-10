@@ -157,7 +157,8 @@ class Main(object):
         template
         """
         parser = argparse.ArgumentParser(
-            description=parser_decsription
+            description=parser_decsription,
+            add_help=False
         )
         g = parser.add_argument_group('program settings')
         verbose_help = 'logging level'
