@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='exp_wrapper',
-    version='1.0',
+    version='1.1',
     author='Hayato Sasaki',
     packages=['exp_wrapper'],
     install_requires=['GitPython'],
