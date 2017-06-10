@@ -21,11 +21,11 @@ class Main(object):
     ## コンストラクタ
     #  @param self オブジェクト自身に対するポインタ
     #  @param argv コマンドライン引数を保持するリスト
-    def __init__(self, argv):
-        parser = self.make_parser()
+    def __init__(self, argv, parents_dict={}):
         ## @var args
         #  コマンドライン引数のリスト
-        self.args = parser.parse_args(argv)
+        self.args = None
+        self.parse_args(argv, parents_dict)
         ## @var in_params
         #  入力パラメータの辞書(コマンドライン引数で初期化している)
         self.in_params = vars(self.args)
@@ -145,6 +145,24 @@ class Main(object):
         """
         pass
 
+    def make_aggregated_parser(self, parents):
+        main_parser = parents[-1]
+        prog = main_parser.prog
+        description = main_parser.description
+        epilog = main_parser.epilog
+        version = main_parser.version
+        aggregated_parser = argparse.ArgumentParser(
+            prog=prog,
+            description=description,
+            epilog=epilog,
+            version=version,
+            parents=parents,
+            add_help=True
+        )
+        aggregated_parser.formatter_class = \
+            argparse.ArgumentDefaultsHelpFormatter
+        return aggregated_parser
+
     ## コマンドライン引数のパーサを生成するメソッド
     #
     #  excute()と同様に, 継承先のクラスで本メソッドをオーバーライドして利用する.@n
@@ -157,17 +175,19 @@ class Main(object):
         template
         """
         parser = argparse.ArgumentParser(
-            description=parser_decsription
+            description=parser_decsription,
+            add_help=False
         )
+        g = parser.add_argument_group('program settings')
         verbose_help = 'logging level'
-        parser.add_argument(
+        g.add_argument(
             '-v', '--verbose',
             type=int,
             default=INFO,
             help=verbose_help
         )
         logfile_help = 'log file name'
-        parser.add_argument(
+        g.add_argument(
             '-l', '--logfile',
             type=str,
             default=None,
@@ -177,13 +197,27 @@ class Main(object):
             'If unskipvalues is set, '\
             'dict values which is not JSON serializable will be skipped '\
             'instead of raise TypeError'
-        parser.add_argument(
+        g.add_argument(
             '--unskipvalues',
             action='store_true',
             help=unskip_help
         )
 
         return parser
+
+    def parse_args(self, argv, parser_dict):
+        parser = self.make_parser()
+        parser_dict['main'] = parser
+        parents = parser_dict.values()
+        aggregated_parser = self.make_aggregated_parser(parents)
+        aggregated_parser.parse_args(argv)
+        remain_args = argv
+        self.args, remain_args = \
+            parser_dict['main'].parse_known_args(remain_args)
+        for name, parser in parser_dict.items():
+            if name != 'main':
+                args, remain_args = parser.parse_known_args(remain_args)
+                setattr(self.args, name, args)
 
 
 ## main関数
