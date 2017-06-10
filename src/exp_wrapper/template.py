@@ -21,14 +21,16 @@ class Main(object):
     ## コンストラクタ
     #  @param self オブジェクト自身に対するポインタ
     #  @param argv コマンドライン引数を保持するリスト
-    def __init__(self, argv, parents=[]):
-        parser = self.make_parser()
-        parents.append(parser)
-        aggregated_parser = self.make_aggregated_parser(parents)
-        aggregated_parser.parse_args(argv)
+    def __init__(self, argv, parents_dict={}):
         ## @var args
         #  コマンドライン引数のリスト
-        self.args = parser.parse_args(argv)
+        self.args = None
+        parser = self.make_parser()
+        parents_dict['main'] = parser
+        parents = parents_dict.values()
+        aggregated_parser = self.make_aggregated_parser(parents)
+        aggregated_parser.parse_args(argv)
+        self.parse_args(argv, parents_dict)
         ## @var in_params
         #  入力パラメータの辞書(コマンドライン引数で初期化している)
         self.in_params = vars(self.args)
@@ -207,6 +209,15 @@ class Main(object):
         )
 
         return parser
+
+    def parse_args(self, argv, parser_dict):
+        remain_args = argv
+        self.args, remain_args = \
+            parser_dict['main'].parse_known_args(remain_args)
+        for name, parser in parser_dict.items():
+            if name != 'main':
+                args, remain_args = parser.parse_known_args(remain_args)
+                setattr(self.args, name, args)
 
 
 ## main関数
