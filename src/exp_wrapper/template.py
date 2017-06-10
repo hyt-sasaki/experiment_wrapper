@@ -159,15 +159,16 @@ class Main(object):
         parser = argparse.ArgumentParser(
             description=parser_decsription
         )
+        g = parser.add_argument_group('program settings')
         verbose_help = 'logging level'
-        parser.add_argument(
+        g.add_argument(
             '-v', '--verbose',
             type=int,
             default=INFO,
             help=verbose_help
         )
         logfile_help = 'log file name'
-        parser.add_argument(
+        g.add_argument(
             '-l', '--logfile',
             type=str,
             default=None,
@@ -177,7 +178,7 @@ class Main(object):
             'If unskipvalues is set, '\
             'dict values which is not JSON serializable will be skipped '\
             'instead of raise TypeError'
-        parser.add_argument(
+        g.add_argument(
             '--unskipvalues',
             action='store_true',
             help=unskip_help
