@@ -21,11 +21,13 @@ class Main(object):
     ## コンストラクタ
     #  @param self オブジェクト自身に対するポインタ
     #  @param argv コマンドライン引数を保持するリスト
-    def __init__(self, argv, parents_dict={}):
+    def __init__(self, argv):
+        if not hasattr(self, 'parents_dict'):
+            self.parents_dict = {}
         ## @var args
         #  コマンドライン引数のリスト
         self.args = None
-        self.parse_args(argv, parents_dict)
+        self.parse_args(argv)
         ## @var in_params
         #  入力パラメータの辞書(コマンドライン引数で初期化している)
         self.in_params = vars(self.args)
@@ -223,17 +225,17 @@ class Main(object):
 
         return parser
 
-    def parse_args(self, argv, parser_dict):
+    def parse_args(self, argv):
         parser = self.make_parser()
-        parents = parser_dict.values()
+        parents = self.parents_dict.values()
         parents.append(parser)
         aggregated_parser = self.make_aggregated_parser(parents)
         aggregated_parser.parse_args(argv)
         remain_args = argv
-        parser_dict['main'] = parser
+        self.parents_dict['main'] = parser
         self.args, remain_args = \
-            parser_dict['main'].parse_known_args(remain_args)
-        for name, parser in parser_dict.items():
+            self.parents_dict['main'].parse_known_args(remain_args)
+        for name, parser in self.parents_dict.items():
             if name != 'main':
                 args, remain_args = parser.parse_known_args(remain_args)
                 setattr(self.args, name, args)
