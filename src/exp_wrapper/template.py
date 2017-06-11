@@ -225,11 +225,12 @@ class Main(object):
 
     def parse_args(self, argv, parser_dict):
         parser = self.make_parser()
-        parser_dict['main'] = parser
         parents = parser_dict.values()
+        parents.append(parser)
         aggregated_parser = self.make_aggregated_parser(parents)
         aggregated_parser.parse_args(argv)
         remain_args = argv
+        parser_dict['main'] = parser
         self.args, remain_args = \
             parser_dict['main'].parse_known_args(remain_args)
         for name, parser in parser_dict.items():
