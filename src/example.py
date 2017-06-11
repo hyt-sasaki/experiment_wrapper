@@ -3,6 +3,7 @@
 #
 #  実験用スクリプトの具体例が記述されているパッケージ
 from exp_wrapper import template
+from exp_wrapper.decorator import arg_decorator
 from argparse import ArgumentParser
 from argparse import ArgumentDefaultsHelpFormatter
 
@@ -15,12 +16,10 @@ class Example(template.Main):        # templateを継承
     #  @param self オブジェクト自身に対するポインタ
     #  @param argv コマンドライン引数を保持するリスト
     def __init__(self, argv):
+        self.make_calc_parser()
+        self.make_io_parser()
         # 親クラスtemplate.Mainのコンストラクタを実行
-        parents_dict = {
-            'calc': self.make_calc_parser(),
-            'io': self.make_io_parser()
-        }
-        super(Example, self).__init__(argv, parents_dict)
+        super(Example, self).__init__(argv)
 
     ## メイン処理を行うメソッド
     #
@@ -73,6 +72,7 @@ class Example(template.Main):        # templateを継承
 
         return parser
 
+    @arg_decorator('calc')
     def make_calc_parser(self):
         parser = ArgumentParser(
             formatter_class=ArgumentDefaultsHelpFormatter
@@ -95,6 +95,7 @@ class Example(template.Main):        # templateを継承
 
         return parser
 
+    @arg_decorator('io')
     def make_io_parser(self):
         parser = ArgumentParser(
             formatter_class=ArgumentDefaultsHelpFormatter
