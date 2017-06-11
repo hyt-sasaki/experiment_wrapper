@@ -151,6 +151,24 @@ class Main(object):
         description = main_parser.description
         epilog = main_parser.epilog
         version = main_parser.version
+
+        def remove_options(parser, options):
+            for option in options:
+                for action in parser._actions:
+                    action_dict = vars(action)
+                    if 'option_strings' in action_dict:
+                        opt_strs = action_dict['option_strings']
+                        if option in opt_strs:
+                            parser._handle_conflict_resolve(
+                                None, [(option, action)]
+                            )
+                            break
+
+        for parser in parents:
+            if parser.add_help:
+                remove_options(parser, ['--help', '-h'])
+                parser.add_help = False
+
         aggregated_parser = argparse.ArgumentParser(
             prog=prog,
             description=description,
