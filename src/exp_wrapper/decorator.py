@@ -10,5 +10,6 @@ def arg_decorator(name):
                 self.parents_dict = {}
             parser = func(self, *args, **kwargs)
             self.parents_dict[name] = parser
+            return parser
         return wrapper
     return _arg_decorator
